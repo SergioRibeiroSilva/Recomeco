@@ -99,7 +99,7 @@ const Strengthening = () => {
         gap: '1.5rem',
         maxWidth: '560px',
         width: '100%',
-        padding: '2rem',
+        padding: '2rem 2rem 10rem 2rem',
         textAlign: 'center',
       }}>
         {/* Jardim de progresso */}

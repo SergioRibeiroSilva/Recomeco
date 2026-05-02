@@ -68,7 +68,7 @@ const Intro = () => {
         width: '100%',
         maxWidth: '860px',
         height: '100vh',
-        padding: '1.5rem',
+        padding: '1.5rem 1.5rem 8rem 1.5rem',
         textAlign: 'center',
         overflow: 'hidden',
         boxSizing: 'border-box',

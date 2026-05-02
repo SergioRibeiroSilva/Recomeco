@@ -82,10 +82,10 @@ const Narrative = () => {
         justifyContent: 'center',
         maxWidth: '680px',
         width: '100%',
-        padding: '2rem',
+        padding: '2rem 2rem 10rem 2rem',
         textAlign: 'center',
         gap: '2rem',
-        minHeight: '80vh',
+        minHeight: '85vh',
       }}
     >
       <AnimatePresence mode="wait">

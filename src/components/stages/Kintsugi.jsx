@@ -170,7 +170,7 @@ const Kintsugi = () => {
         height: '100vh',
         overflow: 'hidden',
         position: 'relative',
-        padding: '1rem',
+        padding: '1rem 1rem 6rem 1rem',
         boxSizing: 'border-box',
       }}
     >

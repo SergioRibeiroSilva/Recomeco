@@ -101,7 +101,7 @@ const Breather = () => {
               zIndex: 10,
               textAlign: 'center',
               maxWidth: '500px',
-              padding: '2rem',
+              padding: '2rem 2rem 8rem 2rem',
             }}
           >
             <motion.h2
