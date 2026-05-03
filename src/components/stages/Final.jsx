@@ -195,7 +195,8 @@ const Final = () => {
               whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,255,255,0.1)' }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
-                const text = encodeURIComponent('Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ');
+                const url = 'https://SergioRibeiroSilva.github.io/Recomeco/';
+                const text = encodeURIComponent(`Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ${url}`);
                 window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
               }}
               style={{
@@ -222,7 +223,8 @@ const Final = () => {
               whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(37,211,102,0.3)' }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
-                const text = encodeURIComponent('Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: https://recomeco-app.vercel.app'); // Adicionei um link fictício para exemplo, mas manterei o texto original se preferir
+                const url = 'https://SergioRibeiroSilva.github.io/Recomeco/';
+                const text = encodeURIComponent(`Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ${url}`);
                 window.open(`https://wa.me/?text=${text}`, '_blank');
               }}
               style={{
