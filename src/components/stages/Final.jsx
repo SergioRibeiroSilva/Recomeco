@@ -189,8 +189,10 @@ const Final = () => {
             >
               ↩ Refazer a jornada
             </motion.button>
+
+            {/* Compartilhar no X */}
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,215,0,0.3)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,255,255,0.1)' }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
                 const text = encodeURIComponent('Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ');
@@ -199,17 +201,47 @@ const Final = () => {
               style={{
                 padding: '0.9rem 2rem',
                 borderRadius: '50px',
-                background: 'linear-gradient(135deg, #ffd700, #ff8c42)',
-                border: 'none',
-                color: 'black',
+                background: '#000',
+                border: '1px solid rgba(255,255,255,0.2)',
+                color: 'white',
                 fontSize: '0.9rem',
                 fontWeight: 700,
                 cursor: 'pointer',
                 fontFamily: 'Outfit, sans-serif',
                 letterSpacing: '0.05em',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
               }}
             >
-              Compartilhar esperança ✨
+              <span>𝕏</span> Compartilhar no X
+            </motion.button>
+
+            {/* Compartilhar no WhatsApp */}
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(37,211,102,0.3)' }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const text = encodeURIComponent('Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: https://recomeco-app.vercel.app'); // Adicionei um link fictício para exemplo, mas manterei o texto original se preferir
+                window.open(`https://wa.me/?text=${text}`, '_blank');
+              }}
+              style={{
+                padding: '0.9rem 2rem',
+                borderRadius: '50px',
+                background: '#25D366',
+                border: 'none',
+                color: 'white',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                fontFamily: 'Outfit, sans-serif',
+                letterSpacing: '0.05em',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <span>💬</span> Compartilhar no WhatsApp
             </motion.button>
           </div>
 
