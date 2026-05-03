@@ -202,7 +202,7 @@ const Intro = () => {
           letterSpacing: '0.15em',
         }}
       >
-        ✦ você não está sozinho nessa ✦
+        ✦ você não está sozinho ✦
       </motion.p>
     </motion.div>
   );

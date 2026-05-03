@@ -188,7 +188,7 @@ const Kintsugi = () => {
           marginBottom: '0.3rem',
           lineHeight: 1.3,
         }}>
-          Junte os pedaços. Reconstituía-se.
+          Junte os pedaços. Reconstrua-se.
         </h2>
         <p style={{ fontSize: 'clamp(0.7rem, 2vw, 0.85rem)', color: 'rgba(255,255,255,0.4)', fontStyle: 'italic', marginBottom: '0.25rem' }}>
           Arraste cada fragmento para o centro do coração.
@@ -284,7 +284,7 @@ const Kintsugi = () => {
           >
             <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ fontSize: '2rem' }}>✨</motion.span>
             <p style={{ fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)', color: 'rgba(255,215,0,0.95)', fontStyle: 'italic', fontWeight: 300, maxWidth: '340px' }}>
-              "O que foi quebrado, curado em ouro, brilha mais forte."
+              "Uma vez provado, o ouro brilha mais forte."
             </p>
             <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.07em' }}>
 
