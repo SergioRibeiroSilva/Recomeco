@@ -10,6 +10,7 @@ const Breather = () => {
   const [breathCount, setBreathCount] = useState(0);
   const [mode, setMode] = useState('fog'); // fog | breathe
   const intervalRef = useRef(null);
+  const containerRef = useRef(null);
 
   // Estados para rastrear a posição do cursor/toque e se ele já se moveu
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -26,13 +27,24 @@ const Breather = () => {
     });
   }, [mode]);
 
-  const handleTouchMove = useCallback((e) => {
-    if (mode !== 'fog') return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    setMousePos({ x: touch.clientX, y: touch.clientY });
-    setIsMoving(true);
-    setCleared(prev => Math.min(prev + 1, 100));
+  // Touch registrado de forma ativa (passive: false) para permitir preventDefault sem avisos
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const onTouchMove = (e) => {
+      if (mode !== 'fog') return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      setMousePos({ x: touch.clientX, y: touch.clientY });
+      setIsMoving(true);
+      setCleared(prev => Math.min(prev + 1, 100));
+    };
+
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => {
+      el.removeEventListener('touchmove', onTouchMove);
+    };
   }, [mode]);
 
   // Quando a névoa está suficientemente limpa, ir para modo respiração
@@ -77,11 +89,11 @@ const Breather = () => {
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
       style={{
         width: '100%',
         height: '100vh',
