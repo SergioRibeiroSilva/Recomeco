@@ -96,6 +96,7 @@ const Intro = () => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
+            paddingRight: '0.15em',
           }}>
             hoje?
           </span>
