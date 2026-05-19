@@ -209,8 +209,9 @@ const Kintsugi = () => {
           width: '100%',
           flex: 1,
           maxWidth: '520px',
-          maxHeight: '520px',
+          maxHeight: allSnapped ? (dims.w < 500 ? '240px' : '340px') : '520px',
           flexShrink: 1,
+          transition: 'max-height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
         {/* Silhueta tracejada (alvo) */}
