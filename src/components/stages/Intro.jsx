@@ -90,7 +90,7 @@ const Intro = () => {
         }}>
           Como está seu coração{' '}
           <span style={{
-            fontWeight: 700,
+            fontWeight: 690,
             fontStyle: 'italic',
             background: 'linear-gradient(135deg, #e0c8ff, #c8e0ff)',
             WebkitBackgroundClip: 'text',
