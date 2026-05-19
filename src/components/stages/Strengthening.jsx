@@ -162,7 +162,7 @@ const Strengthening = () => {
               borderRadius: '50px',
               padding: '1rem 1.5rem',
               color: 'var(--text-main)',
-              fontSize: 'var(--font-body)',
+              fontSize: 'clamp(1.15rem, 3vw, 1.35rem)',
               outline: 'none',
               fontFamily: 'Outfit, sans-serif',
               transition: 'border 0.3s',
@@ -194,7 +194,7 @@ const Strengthening = () => {
         {/* Contador de intenções */}
         <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
           {intentions.length < 3
-            ? `Adicione mais ${3 - intentions.length} intenção${3 - intentions.length !== 1 ? 'ões' : ''} para continuar`
+            ? `Digite mais ${3 - intentions.length} intenção${3 - intentions.length !== 1 ? 'ões' : ''} e clique na mudinha para continuar`
             : '✓ Seu jardim está florescendo!'}
         </p>
 
@@ -220,7 +220,7 @@ const Strengthening = () => {
                 fontWeight: 500,
               }}
             >
-              Estou pronto para o recomeço ✨
+              Clique aqui se está pronto para o recomeço ✨
             </motion.button>
           )}
         </AnimatePresence>
