@@ -18,6 +18,7 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
   const [offset, setOffset] = useState(initOffset);
   const [dragging, setDragging] = useState(false);
   const dragOrigin = useRef(null);
+  const pieceRef = useRef(null);
 
   // Atualiza posição inicial se o container mudar (resize)
   useEffect(() => {
@@ -61,21 +62,31 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
     window.addEventListener('mouseup', mu);
   };
 
-  // Touch
-  const handleTouchStart = (e) => {
-    e.preventDefault();
-    const t = e.touches[0];
-    startDrag(t.clientX, t.clientY);
-    const tm = (e) => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); };
-    const tu = (e) => { const t = e.changedTouches[0]; endDrag(t.clientX, t.clientY); window.removeEventListener('touchmove', tm); window.removeEventListener('touchend', tu); };
-    window.addEventListener('touchmove', tm, { passive: false });
-    window.addEventListener('touchend', tu);
-  };
+  // Touch registrado de forma ativa (passive: false) para permitir preventDefault sem avisos no console
+  useEffect(() => {
+    const el = pieceRef.current;
+    if (!el) return;
+
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+      const t = e.touches[0];
+      startDrag(t.clientX, t.clientY);
+      const tm = (e) => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); };
+      const tu = (e) => { const t = e.changedTouches[0]; endDrag(t.clientX, t.clientY); window.removeEventListener('touchmove', tm, { passive: false }); window.removeEventListener('touchend', tu); };
+      window.addEventListener('touchmove', tm, { passive: false });
+      window.addEventListener('touchend', tu);
+    };
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: false });
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, [startDrag, moveDrag, endDrag]);
 
   return (
     <div
+      ref={pieceRef}
       onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
       style={{
         position: 'absolute',
         left: '50%',
