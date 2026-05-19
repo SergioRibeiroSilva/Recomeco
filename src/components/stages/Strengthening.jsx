@@ -146,55 +146,65 @@ const Strengthening = () => {
           </motion.p>
         </AnimatePresence>
 
-        {/* Formulário */}
-        <form onSubmit={handleAdd} style={{ display: 'flex', gap: '0.75rem', width: '100%' }}>
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            placeholder={`O que você quer cultivar? (${intentions.length}/3)`}
-            disabled={intentions.length >= 6}
-            style={{
-              flex: 1,
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: '50px',
-              padding: '1rem 1.5rem',
-              color: 'var(--text-main)',
-              fontSize: 'clamp(1.15rem, 3vw, 1.35rem)',
-              outline: 'none',
-              fontFamily: 'Outfit, sans-serif',
-              transition: 'border 0.3s',
-            }}
-            onFocus={e => e.target.style.borderColor = 'rgba(200,160,255,0.6)'}
-            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
-          />
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={!inputValue.trim() || intentions.length >= 6}
-            style={{
-              padding: '1rem 1.7rem',
-              borderRadius: '50px',
-              background: 'rgba(200,160,255,0.3)',
-              border: '1px solid rgba(200,160,255,0.45)',
-              color: 'var(--text-main)',
-              cursor: 'pointer',
-              fontSize: '1.2rem',
-              opacity: !inputValue.trim() || intentions.length >= 6 ? 0.4 : 1,
-              transition: 'opacity 0.3s',
-            }}
-          >
-            🌱
-          </motion.button>
-        </form>
+        {/* Formulário com transição de saída suave ao completar as intenções */}
+        <AnimatePresence>
+          {!canProceed && (
+            <motion.form
+              initial={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0, scale: 0.95, overflow: 'hidden', marginTop: 0, marginBottom: 0 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              onSubmit={handleAdd}
+              style={{ display: 'flex', gap: '0.75rem', width: '100%' }}
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                placeholder={`O que você quer cultivar? (${intentions.length}/3)`}
+                disabled={intentions.length >= 6}
+                style={{
+                  flex: 1,
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '50px',
+                  padding: '1rem 1.5rem',
+                  color: 'var(--text-main)',
+                  fontSize: 'clamp(1.15rem, 3vw, 1.35rem)',
+                  outline: 'none',
+                  fontFamily: 'Outfit, sans-serif',
+                  transition: 'border 0.3s',
+                }}
+                onFocus={e => e.target.style.borderColor = 'rgba(200,160,255,0.6)'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
+              />
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={!inputValue.trim() || intentions.length >= 6}
+                style={{
+                  padding: '1rem 1.7rem',
+                  borderRadius: '50px',
+                  background: 'rgba(200,160,255,0.3)',
+                  border: '1px solid rgba(200,160,255,0.45)',
+                  color: 'var(--text-main)',
+                  cursor: 'pointer',
+                  fontSize: '1.2rem',
+                  opacity: !inputValue.trim() || intentions.length >= 6 ? 0.4 : 1,
+                  transition: 'opacity 0.3s',
+                }}
+              >
+                🌱
+              </motion.button>
+            </motion.form>
+          )}
+        </AnimatePresence>
 
         {/* Contador de intenções */}
         <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
           {intentions.length < 3
-            ? `Digite mais ${3 - intentions.length} intenção${3 - intentions.length !== 1 ? 'ões' : ''} e clique na mudinha para continuar`
+            ? `Digite mais ${3 - intentions.length} intenç${3 - intentions.length !== 1 ? 'ões' : 'ão'} e clique na mudinha para continuar`
             : '✓ Seu jardim está florescendo!'}
         </p>
 
