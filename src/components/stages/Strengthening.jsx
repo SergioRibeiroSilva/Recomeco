@@ -99,7 +99,7 @@ const Strengthening = () => {
         gap: '1.5rem',
         maxWidth: '560px',
         width: '100%',
-        padding: '2rem 2rem 10rem 2rem',
+        padding: '2rem 1rem 10rem 1rem',
         textAlign: 'center',
       }}>
         {/* Jardim de progresso */}
@@ -168,7 +168,7 @@ const Strengthening = () => {
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid rgba(255,255,255,0.2)',
                   borderRadius: '50px',
-                  padding: '1rem 1.5rem',
+                  padding: '0.8rem 1rem',
                   color: 'var(--text-main)',
                   fontSize: 'clamp(1.15rem, 3vw, 1.35rem)',
                   outline: 'none',
@@ -184,7 +184,7 @@ const Strengthening = () => {
                 whileTap={{ scale: 0.95 }}
                 disabled={!inputValue.trim() || intentions.length >= 6}
                 style={{
-                  padding: '1rem 1.7rem',
+                  padding: '0.8rem 1.2rem',
                   borderRadius: '50px',
                   background: 'rgba(200,160,255,0.3)',
                   border: '1px solid rgba(200,160,255,0.45)',

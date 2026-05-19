@@ -11,9 +11,15 @@ const Breather = () => {
   const [mode, setMode] = useState('fog'); // fog | breathe
   const intervalRef = useRef(null);
 
+  // Estados para rastrear a posição do cursor/toque e se ele já se moveu
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isMoving, setIsMoving] = useState(false);
+
   // Modo névoa: mover o mouse limpa a névoa
   const handleMouseMove = useCallback((e) => {
     if (mode !== 'fog') return;
+    setMousePos({ x: e.clientX, y: e.clientY });
+    setIsMoving(true);
     setCleared(prev => {
       const next = Math.min(prev + 0.6, 100);
       return next;
@@ -23,6 +29,9 @@ const Breather = () => {
   const handleTouchMove = useCallback((e) => {
     if (mode !== 'fog') return;
     e.preventDefault();
+    const touch = e.touches[0];
+    setMousePos({ x: touch.clientX, y: touch.clientY });
+    setIsMoving(true);
     setCleared(prev => Math.min(prev + 1, 100));
   }, [mode]);
 
@@ -248,6 +257,29 @@ const Breather = () => {
             background: 'radial-gradient(circle, transparent 0%, rgba(10,5,20,0.7) 100%)',
             backdropFilter: `blur(${(1 - cleared / 100) * 20}px)`,
             pointerEvents: 'none',
+          }}
+        />
+      )}
+
+      {/* Feixe de luz que acompanha o mouse/toque com física de mola */}
+      {mode === 'fog' && isMoving && (
+        <motion.div
+          animate={{
+            x: mousePos.x - 150,
+            y: mousePos.y - 150,
+          }}
+          transition={{ type: 'spring', damping: 28, stiffness: 220, mass: 0.1 }}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '300px',
+            height: '300px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,235,180,0.35) 0%, rgba(200,160,255,0.18) 35%, rgba(200,160,255,0.05) 60%, transparent 80%)',
+            pointerEvents: 'none',
+            zIndex: 15,
+            mixBlendMode: 'screen',
           }}
         />
       )}
