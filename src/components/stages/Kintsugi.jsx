@@ -134,8 +134,8 @@ const Kintsugi = () => {
     return () => obs.disconnect();
   }, []);
 
-  // Posições iniciais calculadas dinamicamente: 42% da metade da área
-  const spread = { x: dims.w * 0.42, y: dims.h * 0.42 };
+  // Posições iniciais calculadas dinamicamente: 30% da metade da área para não sair da tela no mobile
+  const spread = { x: dims.w * 0.30, y: dims.h * 0.30 };
   const pieceSize = Math.min(dims.w, dims.h) * 0.44; // peça = 44% do menor lado
   const snapRadius = pieceSize * 0.55; // zona de snap generosa
 

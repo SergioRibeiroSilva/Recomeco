@@ -121,7 +121,7 @@ const Breather = () => {
               transition={{ delay: 0.8 }}
               style={{ fontSize: 'var(--font-subtitle)', fontStyle: 'italic', color: 'var(--text-secondary)' }}
             >
-              Mova o cursor para afastar as nuvens pesadas.
+              Coloque o dedo na tela e mova o cursor para afastar as nuvens pesadas.
             </motion.p>
 
             {/* Barra de progresso de névoa */}
