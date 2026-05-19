@@ -1,5 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&display=swap');
 
+:root {
+  /* Cores de texto vivas com excelente contraste em fundos escuros */
+  --text-main: rgba(255, 255, 255, 0.98);      /* Texto principal mais brilhante */
+  --text-primary: rgba(255, 255, 255, 0.92);   /* Texto principal forte */
+  --text-secondary: rgba(255, 255, 255, 0.75); /* Texto secundário bem legível (antes era 0.5) */
+  --text-muted: rgba(255, 255, 255, 0.65);     /* Legendas e marcas (antes era 0.3/0.4) */
+  --text-very-muted: rgba(255, 255, 255, 0.45);/* Textos extremamente secundários */
+
+  /* Tamanhos de Fonte Responsivos Otimizados (aumentados em telas mobile) */
+  --font-hero: clamp(2.2rem, 6vw, 3.2rem);       /* Títulos chamativos */
+  --font-title: clamp(1.5rem, 4.5vw, 2.2rem);    /* Títulos principais de tela */
+  --font-quote: clamp(1.4rem, 3.8vw, 1.8rem);    /* Citações e frases narrativas */
+  --font-subtitle: clamp(1.05rem, 2.8vw, 1.25rem); /* Subtítulos e explicações */
+  --font-body: clamp(0.95rem, 2.2vw, 1.1rem);    /* Opções, botões, formulários */
+  --font-small: clamp(0.85rem, 2vw, 0.95rem);    /* Legendas, contadores, etiquetas */
+  --font-tiny: clamp(0.78rem, 1.8vw, 0.85rem);   /* Textos muito pequenos (limite min 12px) */
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;

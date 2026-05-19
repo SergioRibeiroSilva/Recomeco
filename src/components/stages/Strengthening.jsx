@@ -29,12 +29,12 @@ const FloatingIntention = ({ text, x, y, delay }) => (
       left: `${x}%`,
       top: `${y}%`,
       transform: 'translate(-50%, -50%)',
-      background: 'rgba(200,160,255,0.12)',
-      border: '1px solid rgba(200,160,255,0.25)',
+      background: 'rgba(200,160,255,0.18)',
+      border: '1px solid rgba(200,160,255,0.35)',
       borderRadius: '24px',
-      padding: '0.6rem 1.2rem',
-      fontSize: '0.85rem',
-      color: 'rgba(255,255,255,0.85)',
+      padding: '0.7rem 1.4rem',
+      fontSize: 'var(--font-body)',
+      color: 'var(--text-main)',
       whiteSpace: 'nowrap',
       backdropFilter: 'blur(8px)',
       pointerEvents: 'none',
@@ -120,9 +120,9 @@ const Strengthening = () => {
         </motion.div>
 
         <h2 style={{
-          fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+          fontSize: 'var(--font-title)',
           fontWeight: 300,
-          color: 'rgba(255,255,255,0.9)',
+          color: 'var(--text-main)',
           lineHeight: 1.2,
         }}>
           Plante suas intenções.
@@ -133,12 +133,12 @@ const Strengthening = () => {
           <motion.p
             key={currentAffIdx}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 0.7, y: 0 }}
+            animate={{ opacity: 0.9, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             style={{
-              fontSize: '0.95rem',
+              fontSize: 'var(--font-subtitle)',
               fontStyle: 'italic',
-              color: 'rgba(255,255,255,0.6)',
+              color: 'var(--text-primary)',
               lineHeight: 1.5,
             }}
           >
@@ -157,18 +157,18 @@ const Strengthening = () => {
             disabled={intentions.length >= 6}
             style={{
               flex: 1,
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.2)',
               borderRadius: '50px',
-              padding: '0.9rem 1.5rem',
-              color: 'rgba(255,255,255,0.9)',
-              fontSize: '0.95rem',
+              padding: '1rem 1.5rem',
+              color: 'var(--text-main)',
+              fontSize: 'var(--font-body)',
               outline: 'none',
               fontFamily: 'Outfit, sans-serif',
               transition: 'border 0.3s',
             }}
-            onFocus={e => e.target.style.borderColor = 'rgba(200,160,255,0.4)'}
-            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
+            onFocus={e => e.target.style.borderColor = 'rgba(200,160,255,0.6)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
           />
           <motion.button
             type="submit"
@@ -176,11 +176,11 @@ const Strengthening = () => {
             whileTap={{ scale: 0.95 }}
             disabled={!inputValue.trim() || intentions.length >= 6}
             style={{
-              padding: '0.9rem 1.5rem',
+              padding: '1rem 1.7rem',
               borderRadius: '50px',
-              background: 'rgba(200,160,255,0.2)',
-              border: '1px solid rgba(200,160,255,0.3)',
-              color: 'rgba(255,255,255,0.9)',
+              background: 'rgba(200,160,255,0.3)',
+              border: '1px solid rgba(200,160,255,0.45)',
+              color: 'var(--text-main)',
               cursor: 'pointer',
               fontSize: '1.2rem',
               opacity: !inputValue.trim() || intentions.length >= 6 ? 0.4 : 1,
@@ -192,7 +192,7 @@ const Strengthening = () => {
         </form>
 
         {/* Contador de intenções */}
-        <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+        <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
           {intentions.length < 3
             ? `Adicione mais ${3 - intentions.length} intenção${3 - intentions.length !== 1 ? 'ões' : ''} para continuar`
             : '✓ Seu jardim está florescendo!'}
@@ -211,9 +211,9 @@ const Strengthening = () => {
                 padding: '1rem 3rem',
                 borderRadius: '50px',
                 background: 'linear-gradient(135deg, rgba(200,160,255,0.25), rgba(255,180,120,0.2))',
-                border: '1px solid rgba(255,255,255,0.2)',
-                color: 'rgba(255,255,255,0.9)',
-                fontSize: '1rem',
+                border: '1px solid rgba(255,255,255,0.3)',
+                color: 'var(--text-main)',
+                fontSize: 'var(--font-body)',
                 cursor: 'pointer',
                 letterSpacing: '0.05em',
                 fontFamily: 'Outfit, sans-serif',

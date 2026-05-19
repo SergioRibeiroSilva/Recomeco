@@ -190,12 +190,12 @@ const Narrative = () => {
           {/* Número do capítulo */}
           <motion.span
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.3 }}
+            animate={{ opacity: 0.7 }}
             style={{
-              fontSize: '0.7rem',
+              fontSize: 'var(--font-small)',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.4)',
+              color: 'var(--text-muted)',
             }}
           >
             {chapterIndex + 1} / {chapters.length}
@@ -204,10 +204,10 @@ const Narrative = () => {
           {/* Frase principal com typewriter */}
           <motion.p
             style={{
-              fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
+              fontSize: 'var(--font-quote)',
               fontWeight: 300,
               lineHeight: 1.6,
-              color: 'rgba(255,255,255,0.9)',
+              color: 'var(--text-main)',
               fontStyle: 'italic',
             }}
           >
@@ -217,11 +217,11 @@ const Narrative = () => {
           {/* Sub-frase */}
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
+            animate={{ opacity: 0.85 }}
             transition={{ delay: chapter.text.length * 0.028 + 0.5 }}
             style={{
-              fontSize: '0.95rem',
-              color: 'rgba(255,255,255,0.5)',
+              fontSize: 'var(--font-subtitle)',
+              color: 'var(--text-secondary)',
               fontWeight: 400,
             }}
           >
@@ -237,10 +237,11 @@ const Narrative = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}
             >
               <p style={{
-                fontSize: '0.85rem',
+                fontSize: 'var(--font-body)',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.4)',
+                color: 'var(--text-primary)',
+                fontWeight: 500,
               }}>
                 {chapter.question}
               </p>
@@ -252,20 +253,20 @@ const Narrative = () => {
                 {chapter.options.map(opt => (
                   <motion.button
                     key={opt}
-                    whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                    whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.12)' }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleOptionSelect(opt)}
                     style={{
-                      padding: '0.85rem 1rem',
+                      padding: '0.95rem 1rem',
                       borderRadius: '16px',
                       background: selectedOption === opt
-                        ? 'rgba(200,160,255,0.2)'
-                        : 'rgba(255,255,255,0.05)',
+                        ? 'rgba(200,160,255,0.3)'
+                        : 'rgba(255,255,255,0.08)',
                       border: selectedOption === opt
-                        ? '1px solid rgba(200,160,255,0.5)'
-                        : '1px solid rgba(255,255,255,0.08)',
-                      color: 'rgba(255,255,255,0.85)',
-                      fontSize: '0.9rem',
+                        ? '1px solid rgba(200,160,255,0.7)'
+                        : '1px solid rgba(255,255,255,0.15)',
+                      color: 'var(--text-main)',
+                      fontSize: 'var(--font-body)',
                       cursor: 'pointer',
                       transition: 'all 0.3s',
                     }}
@@ -290,16 +291,16 @@ const Narrative = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(255,255,255,0.12)',
+              border: '1px solid rgba(255,255,255,0.25)',
               borderRadius: '50px',
-              padding: '0.85rem 2.5rem',
-              color: 'rgba(255,255,255,0.8)',
-              fontSize: '0.9rem',
+              padding: '1rem 3rem',
+              color: 'var(--text-main)',
+              fontSize: 'var(--font-body)',
               letterSpacing: '0.1em',
               cursor: 'pointer',
               textTransform: 'uppercase',
-              marginTop: '1rem',
+              marginTop: '1.5rem',
             }}
           >
             {isLast ? 'Estou pronto para continuar →' : 'Continuar →'}

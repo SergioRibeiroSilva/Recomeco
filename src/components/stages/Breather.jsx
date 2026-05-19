@@ -108,18 +108,18 @@ const Breather = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: 'var(--font-title)',
                 fontWeight: 300,
-                color: 'rgba(255,255,255,0.9)',
+                color: 'var(--text-main)',
               }}
             >
               Respire fundo.
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 0.85 }}
               transition={{ delay: 0.8 }}
-              style={{ fontSize: '1rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.5)' }}
+              style={{ fontSize: 'var(--font-subtitle)', fontStyle: 'italic', color: 'var(--text-secondary)' }}
             >
               Mova o cursor para afastar as nuvens pesadas.
             </motion.p>
@@ -132,7 +132,7 @@ const Breather = () => {
               />
             </div>
 
-            <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+            <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
               {Math.round(cleared)}% da névoa dissipada
             </p>
           </motion.div>
@@ -154,8 +154,8 @@ const Breather = () => {
           >
             <motion.p
               initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 0.5, y: 0 }}
-              style={{ fontSize: '0.8rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}
+              animate={{ opacity: 0.8, y: 0 }}
+              style={{ fontSize: 'var(--font-small)', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}
             >
               Exercício de Respiração · {breathCount}/2 ciclos
             </motion.p>
@@ -226,10 +226,10 @@ const Breather = () => {
                 exit={{ opacity: 0, y: -10 }}
                 style={{ textAlign: 'center' }}
               >
-                <p style={{ fontSize: '2rem', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>
+                <p style={{ fontSize: 'var(--font-hero)', fontWeight: 300, color: 'var(--text-main)' }}>
                   {phaseText.text}
                 </p>
-                <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.25rem' }}>
+                <p style={{ fontSize: 'var(--font-body)', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                   {phaseText.sub}
                 </p>
               </motion.div>

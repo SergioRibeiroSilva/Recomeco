@@ -99,9 +99,9 @@ const Final = () => {
           }}
         >
           <p style={{
-            fontSize: 'clamp(1.3rem, 3vw, 2rem)',
+            fontSize: 'var(--font-quote)',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.9)',
+            color: 'var(--text-main)',
             fontStyle: 'italic',
             lineHeight: 1.5,
             maxWidth: '600px',
@@ -145,7 +145,7 @@ const Final = () => {
 
           <div>
             <h1 style={{
-              fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+              fontSize: 'clamp(2.2rem, 6vw, 4.5rem)',
               fontWeight: 700,
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
@@ -158,9 +158,9 @@ const Final = () => {
               O sol sempre volta.
             </h1>
             <p style={{
-              fontSize: 'clamp(1rem, 2vw, 1.3rem)',
+              fontSize: 'var(--font-subtitle)',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.7)',
+              color: 'var(--text-secondary)',
               lineHeight: 1.6,
               maxWidth: '500px',
             }}>
@@ -176,12 +176,12 @@ const Final = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => window.location.reload()}
               style={{
-                padding: '0.9rem 2rem',
+                padding: '1rem 2.2rem',
                 borderRadius: '50px',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                color: 'rgba(255,255,255,0.8)',
-                fontSize: '0.9rem',
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                color: 'var(--text-main)',
+                fontSize: 'var(--font-body)',
                 cursor: 'pointer',
                 fontFamily: 'Outfit, sans-serif',
                 letterSpacing: '0.05em',
@@ -200,12 +200,12 @@ const Final = () => {
                 window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
               }}
               style={{
-                padding: '0.9rem 2rem',
+                padding: '1rem 2.2rem',
                 borderRadius: '50px',
                 background: '#000',
-                border: '1px solid rgba(255,255,255,0.2)',
+                border: '1px solid rgba(255,255,255,0.35)',
                 color: 'white',
-                fontSize: '0.9rem',
+                fontSize: 'var(--font-body)',
                 fontWeight: 700,
                 cursor: 'pointer',
                 fontFamily: 'Outfit, sans-serif',
@@ -228,12 +228,12 @@ const Final = () => {
                 window.open(`https://wa.me/?text=${text}`, '_blank');
               }}
               style={{
-                padding: '0.9rem 2rem',
+                padding: '1rem 2.2rem',
                 borderRadius: '50px',
                 background: '#25D366',
                 border: 'none',
                 color: 'white',
-                fontSize: '0.9rem',
+                fontSize: 'var(--font-body)',
                 fontWeight: 700,
                 cursor: 'pointer',
                 fontFamily: 'Outfit, sans-serif',
@@ -250,12 +250,12 @@ const Final = () => {
           {/* Easter egg */}
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.2 }}
+            animate={{ opacity: 0.55 }}
             transition={{ delay: 5 }}
             style={{
-              fontSize: '0.65rem',
+              fontSize: 'var(--font-small)',
               letterSpacing: '0.2em',
-              color: 'rgba(255,255,255,0.4)',
+              color: 'var(--text-muted)',
               marginTop: '2rem',
               textTransform: 'uppercase',
             }}

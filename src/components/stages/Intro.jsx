@@ -82,11 +82,11 @@ const Intro = () => {
         style={{ marginBottom: '0.5rem' }}
       >
         <h1 style={{
-          fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
+          fontSize: 'var(--font-hero)',
           fontWeight: 300,
           lineHeight: 1.15,
           letterSpacing: '-0.02em',
-          color: 'rgba(255,255,255,0.95)',
+          color: 'var(--text-main)',
         }}>
           Como está seu coração{' '}
           <span style={{
@@ -104,13 +104,13 @@ const Intro = () => {
 
       <motion.p
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
+        animate={{ opacity: 0.8 }}
         transition={{ delay: 1.2, duration: 1 }}
         style={{
-          fontSize: '0.9rem',
+          fontSize: 'var(--font-subtitle)',
           fontStyle: 'italic',
           marginBottom: '1.75rem',
-          color: 'rgba(255,255,255,0.5)',
+          color: 'var(--text-secondary)',
         }}
       >
         Não há resposta errada. Apenas a sua verdade.
@@ -170,17 +170,17 @@ const Intro = () => {
               {mood.emoji}
             </motion.span>
             <span style={{
-              fontSize: '1.1rem',
+              fontSize: 'var(--font-body)',
               fontWeight: 600,
               letterSpacing: '0.05em',
-              color: 'rgba(255,255,255,0.9)',
+              color: 'var(--text-main)',
               zIndex: 1,
             }}>
               {mood.label}
             </span>
             <span style={{
-              fontSize: '0.78rem',
-              color: 'rgba(255,255,255,0.4)',
+              fontSize: 'var(--font-small)',
+              color: 'var(--text-secondary)',
               fontStyle: 'italic',
               zIndex: 1,
             }}>

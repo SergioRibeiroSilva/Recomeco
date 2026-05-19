@@ -23,12 +23,12 @@ const ProgressBar = () => {
       <motion.p
         key={currentStage}
         initial={{ opacity: 0, y: 5 }}
-        animate={{ opacity: 0.5, y: 0 }}
+        animate={{ opacity: 0.85, y: 0 }}
         style={{
-          fontSize: '0.65rem',
+          fontSize: 'var(--font-small)',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.5)',
+          color: 'var(--text-secondary)',
         }}
       >
         {STAGE_LABELS[currentStage]}

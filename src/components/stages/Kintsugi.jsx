@@ -104,8 +104,8 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         pointerEvents: 'none', gap: '3px',
       }}>
-        <span style={{ fontSize: `${pieceSize * 0.2}px` }}>{piece.emoji}</span>
-        <span style={{ fontSize: `${Math.max(pieceSize * 0.07, 8)}px`, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: `${pieceSize * 0.22}px` }}>{piece.emoji}</span>
+        <span style={{ fontSize: `${Math.max(pieceSize * 0.085, 12)}px`, color: 'var(--text-primary)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 500 }}>
           {piece.label}
         </span>
       </div>
@@ -182,20 +182,20 @@ const Kintsugi = () => {
         style={{ textAlign: 'center', marginBottom: '1rem', zIndex: 20, flexShrink: 0 }}
       >
         <h2 style={{
-          fontSize: 'clamp(1.1rem, 3.5vw, 2rem)',
+          fontSize: 'var(--font-title)',
           fontWeight: 300,
-          color: 'rgba(255,255,255,0.9)',
+          color: 'var(--text-main)',
           marginBottom: '0.3rem',
           lineHeight: 1.3,
         }}>
           Junte os pedaços. Reconstrua-se.
         </h2>
-        <p style={{ fontSize: 'clamp(0.7rem, 2vw, 0.85rem)', color: 'rgba(255,255,255,0.4)', fontStyle: 'italic', marginBottom: '0.25rem' }}>
+        <p style={{ fontSize: 'var(--font-subtitle)', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.25rem' }}>
           Arraste cada fragmento para o centro do coração.
         </p>
         <motion.p
-          animate={{ color: snapped.length > 0 ? 'rgba(200,160,255,0.8)' : 'rgba(255,255,255,0.3)' }}
-          style={{ fontSize: '0.72rem', letterSpacing: '0.1em' }}
+          animate={{ color: snapped.length > 0 ? 'rgba(200,160,255,0.95)' : 'var(--text-muted)' }}
+          style={{ fontSize: 'var(--font-small)', letterSpacing: '0.1em' }}
         >
           {snapped.length} / {PIECE_DEFS.length} peças reunidas
         </motion.p>
@@ -282,11 +282,11 @@ const Kintsugi = () => {
               gap: '0.4rem',
             }}
           >
-            <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ fontSize: '2rem' }}>✨</motion.span>
-            <p style={{ fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)', color: 'rgba(255,215,0,0.95)', fontStyle: 'italic', fontWeight: 300, maxWidth: '340px' }}>
+            <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ fontSize: '2.2rem' }}>✨</motion.span>
+            <p style={{ fontSize: 'var(--font-subtitle)', color: 'rgba(255,215,0,0.98)', fontStyle: 'italic', fontWeight: 300, maxWidth: '340px' }}>
               "Uma vez provado, o ouro brilha mais forte."
             </p>
-            <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.07em' }}>
+            <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-secondary)', letterSpacing: '0.07em' }}>
 
             </p>
           </motion.div>
