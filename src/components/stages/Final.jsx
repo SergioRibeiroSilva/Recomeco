@@ -191,21 +191,6 @@ const Final = () => {
               Refazer a jornada
             </motion.button>
 
-            {/* Compartilhar no X */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => {
-                const url = 'https://SergioRibeiroSilva.github.io/Recomeco/';
-                const text = encodeURIComponent(`Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ${url}`);
-                window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
-              }}
-              className="btn"
-              style={{ background: '#000', borderColor: 'var(--border-strong)', color: '#fff' }}
-            >
-              <span aria-hidden="true" style={{ fontWeight: 700 }}>𝕏</span> Compartilhar no X
-            </motion.button>
-
             {/* Compartilhar no WhatsApp */}
             <motion.button
               whileHover={{ scale: 1.04 }}
@@ -235,7 +220,7 @@ const Final = () => {
               textTransform: 'uppercase',
             }}
           >
-            ✦ feito com cuidado para quem precisa recomeçar ✦
+            ✦ Feito com carinho e cuidado para quem precisa recomeçar! ✦
           </motion.p>
         </motion.div>
       )}

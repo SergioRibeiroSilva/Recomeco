@@ -203,7 +203,7 @@ const Kintsugi = () => {
           Junte os pedaços. Reconstrua-se.
         </h2>
         <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
-          Arraste cada fragmento para o centro do coração.
+          Arraste cada fragmento e comece a reconstrução.
         </p>
         <motion.p
           animate={{ color: snapped.length > 0 ? '#f6d9a6' : 'rgba(251,244,234,0.68)' }}
