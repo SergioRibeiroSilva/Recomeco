@@ -175,7 +175,7 @@ const Narrative = () => {
         width: '100%',
         padding: '2rem 2rem 10rem 2rem',
         textAlign: 'center',
-        gap: '2rem',
+        gap: '1rem',
         minHeight: '85vh',
       }}
     >
@@ -274,7 +274,7 @@ const Narrative = () => {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             className="btn btn-primary"
-            style={{ marginTop: '1.5rem', padding: '0.95rem 2.6rem' }}
+            style={{ padding: '0.95rem 2.6rem' }}
           >
             {isLast ? 'Estou pronto para continuar' : 'Continuar'}
             <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
