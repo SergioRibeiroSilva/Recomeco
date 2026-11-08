@@ -134,7 +134,7 @@ const Strengthening = () => {
           color: 'var(--text-main)',
           lineHeight: 1.2,
         }}>
-          Plante suas intenções.
+          3 sentimentos que você pode cultivar.
         </h2>
 
         {/* Afirmação rotativa */}
