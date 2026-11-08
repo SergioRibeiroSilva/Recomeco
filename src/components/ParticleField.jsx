@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useJourney } from '../context/JourneyContext';
 
+// Poeira de luz: do azul-lua ao dourado do amanhecer
 const STAGE_COLORS = [
-  { r: 80, g: 80, b: 100 },     // Stage 0 - Cinza azulado
-  { r: 100, g: 90, b: 120 },    // Stage 1 - Roxo suave
-  { r: 120, g: 100, b: 150 },   // Stage 2 - Lavanda
-  { r: 150, g: 120, b: 180 },   // Stage 3 - Violeta
-  { r: 200, g: 150, b: 200 },   // Stage 4 - Rosa suave
-  { r: 255, g: 180, b: 120 },   // Stage 5 - Dourado quente
+  { r: 150, g: 170, b: 220 },   // Stage 0 - Azul lua
+  { r: 160, g: 175, b: 225 },   // Stage 1 - Azul névoa
+  { r: 190, g: 175, b: 225 },   // Stage 2 - Lavanda pálida
+  { r: 150, g: 215, b: 220 },   // Stage 3 - Água-marinha
+  { r: 190, g: 225, b: 190 },   // Stage 4 - Sálvia
+  { r: 255, g: 215, b: 150 },   // Stage 5 - Dourado
 ];
 
 const ParticleField = () => {

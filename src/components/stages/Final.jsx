@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { Sun, RotateCcw, MessageCircle } from 'lucide-react';
 
 const MESSAGES = [
   "Você passou por algo difícil.",
@@ -29,7 +30,7 @@ const Final = () => {
     const canvas = canvasRef.current;
     const myConfetti = confetti.create(canvas, { resize: true, useWorker: false });
 
-    const colors = ['#ff8c42', '#f7aef8', '#ffd700', '#b3e5fc', '#a8edea'];
+    const colors = ['#efc27d', '#f6d9a6', '#f1c4c0', '#bcd3f2', '#bfe0cf'];
     let count = 0;
     const max = 6;
     const interval = setInterval(() => {
@@ -99,8 +100,9 @@ const Final = () => {
           }}
         >
           <p style={{
+            fontFamily: 'var(--font-serif)',
             fontSize: 'var(--font-quote)',
-            fontWeight: 300,
+            fontWeight: 400,
             color: 'var(--text-main)',
             fontStyle: 'italic',
             lineHeight: 1.5,
@@ -115,7 +117,7 @@ const Final = () => {
                 width: i === msgIdx ? '20px' : '6px',
                 height: '4px',
                 borderRadius: '2px',
-                background: i <= msgIdx ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.15)',
+                background: i <= msgIdx ? 'var(--color-gold-400)' : 'var(--surface-3)',
                 transition: 'all 0.4s',
               }} />
             ))}
@@ -137,32 +139,40 @@ const Final = () => {
           {/* Ícone solar */}
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            style={{ fontSize: '4rem' }}
+            transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+            aria-hidden="true"
+            style={{
+              display: 'flex',
+              color: 'var(--color-gold-300)',
+              filter: 'drop-shadow(0 0 28px rgba(246,217,166,0.7))',
+            }}
           >
-            ☀️
+            <Sun size={72} strokeWidth={1.2} />
           </motion.div>
 
           <div>
             <h1 style={{
-              fontSize: 'clamp(2.2rem, 6vw, 4.5rem)',
-              fontWeight: 700,
-              lineHeight: 1.05,
-              letterSpacing: '-0.03em',
-              background: 'linear-gradient(135deg, #fff 0%, #ffd700 40%, #ff8c42 80%)',
+              fontSize: 'clamp(2.3rem, 6.4vw, 4.4rem)',
+              fontWeight: 500,
+              fontStyle: 'italic',
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
+              background: 'linear-gradient(135deg, #fff7e8 0%, #f6d9a6 45%, #f1c4c0 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              marginBottom: '0.75rem',
+              marginBottom: '1rem',
+              paddingBottom: '0.1em',
             }}>
               O sol sempre volta.
             </h1>
             <p style={{
               fontSize: 'var(--font-subtitle)',
-              fontWeight: 300,
-              color: 'var(--text-secondary)',
-              lineHeight: 1.6,
-              maxWidth: '500px',
+              fontWeight: 400,
+              color: 'var(--text-main)',
+              lineHeight: 1.7,
+              maxWidth: '520px',
+              margin: '0 auto',
             }}>
               Sua jornada ganhou um novo fôlego hoje.{' '}
               Você é mais inteiro do que imagina, e o amanhã ainda não foi escrito.
@@ -172,90 +182,55 @@ const Final = () => {
           {/* Ações */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => window.location.reload()}
-              style={{
-                padding: '1rem 2.2rem',
-                borderRadius: '50px',
-                background: 'rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                color: 'var(--text-main)',
-                fontSize: 'var(--font-body)',
-                cursor: 'pointer',
-                fontFamily: 'Outfit, sans-serif',
-                letterSpacing: '0.05em',
-              }}
+              className="btn"
             >
-              ↩ Refazer a jornada
+              <RotateCcw size={18} strokeWidth={2} aria-hidden="true" />
+              Refazer a jornada
             </motion.button>
 
             {/* Compartilhar no X */}
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255,255,255,0.1)' }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => {
                 const url = 'https://SergioRibeiroSilva.github.io/Recomeco/';
                 const text = encodeURIComponent(`Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ${url}`);
                 window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
               }}
-              style={{
-                padding: '1rem 2.2rem',
-                borderRadius: '50px',
-                background: '#000',
-                border: '1px solid rgba(255,255,255,0.35)',
-                color: 'white',
-                fontSize: 'var(--font-body)',
-                fontWeight: 700,
-                cursor: 'pointer',
-                fontFamily: 'Outfit, sans-serif',
-                letterSpacing: '0.05em',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
+              className="btn"
+              style={{ background: '#000', borderColor: 'var(--border-strong)', color: '#fff' }}
             >
-              <span>𝕏</span> Compartilhar no X
+              <span aria-hidden="true" style={{ fontWeight: 700 }}>𝕏</span> Compartilhar no X
             </motion.button>
 
             {/* Compartilhar no WhatsApp */}
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(37,211,102,0.3)' }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => {
                 const url = 'https://SergioRibeiroSilva.github.io/Recomeco/';
                 const text = encodeURIComponent(`Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ${url}`);
                 window.open(`https://wa.me/?text=${text}`, '_blank');
               }}
-              style={{
-                padding: '1rem 2.2rem',
-                borderRadius: '50px',
-                background: '#25D366',
-                border: 'none',
-                color: 'white',
-                fontSize: 'var(--font-body)',
-                fontWeight: 700,
-                cursor: 'pointer',
-                fontFamily: 'Outfit, sans-serif',
-                letterSpacing: '0.05em',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
+              className="btn"
+              style={{ background: '#25D366', borderColor: 'transparent', color: '#06240f' }}
             >
-              <span>💬</span> Compartilhar no WhatsApp
+              <MessageCircle size={18} strokeWidth={2} aria-hidden="true" /> Compartilhar no WhatsApp
             </motion.button>
           </div>
 
           {/* Easter egg */}
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.55 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 5 }}
             style={{
-              fontSize: 'var(--font-small)',
+              fontSize: 'var(--font-tiny)',
               letterSpacing: '0.2em',
-              color: 'var(--text-muted)',
+              color: 'var(--color-gold-300)',
               marginTop: '2rem',
               textTransform: 'uppercase',
             }}

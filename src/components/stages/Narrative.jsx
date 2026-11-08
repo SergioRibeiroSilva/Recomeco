@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { useJourney } from '../../context/JourneyContext';
 
 const CHAPTER_GROUPS = [
@@ -190,13 +191,9 @@ const Narrative = () => {
           {/* Número do capítulo */}
           <motion.span
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
-            style={{
-              fontSize: 'var(--font-small)',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: 'var(--text-muted)',
-            }}
+            animate={{ opacity: 1 }}
+            className="t-eyebrow"
+            style={{ color: 'var(--color-gold-300)' }}
           >
             {chapterIndex + 1} / {chapters.length}
           </motion.span>
@@ -204,24 +201,25 @@ const Narrative = () => {
           {/* Frase principal com typewriter */}
           <motion.p
             style={{
+              fontFamily: 'var(--font-serif)',
               fontSize: 'var(--font-quote)',
-              fontWeight: 300,
+              fontWeight: 400,
               lineHeight: 1.6,
               color: 'var(--text-main)',
               fontStyle: 'italic',
             }}
           >
-            "<TypewriterText text={chapter.text} />"
+            “<TypewriterText text={chapter.text} />”
           </motion.p>
 
           {/* Sub-frase */}
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.85 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: chapter.text.length * 0.028 + 0.5 }}
             style={{
               fontSize: 'var(--font-subtitle)',
-              color: 'var(--text-secondary)',
+              color: 'var(--color-sage-300)',
               fontWeight: 400,
             }}
           >
@@ -236,12 +234,9 @@ const Narrative = () => {
               transition={{ delay: chapter.text.length * 0.028 + 1 }}
               style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}
             >
-              <p style={{
+              <p className="t-eyebrow" style={{
                 fontSize: 'var(--font-body)',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--text-primary)',
-                fontWeight: 500,
+                color: 'var(--text-main)',
               }}>
                 {chapter.question}
               </p>
@@ -253,23 +248,11 @@ const Narrative = () => {
                 {chapter.options.map(opt => (
                   <motion.button
                     key={opt}
-                    whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.12)' }}
+                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleOptionSelect(opt)}
-                    style={{
-                      padding: '0.95rem 1rem',
-                      borderRadius: '16px',
-                      background: selectedOption === opt
-                        ? 'rgba(200,160,255,0.3)'
-                        : 'rgba(255,255,255,0.08)',
-                      border: selectedOption === opt
-                        ? '1px solid rgba(200,160,255,0.7)'
-                        : '1px solid rgba(255,255,255,0.15)',
-                      color: 'var(--text-main)',
-                      fontSize: 'var(--font-body)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s',
-                    }}
+                    aria-pressed={selectedOption === opt}
+                    className="option"
                   >
                     {opt}
                   </motion.button>
@@ -288,22 +271,13 @@ const Narrative = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             onClick={handleNext}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              borderRadius: '50px',
-              padding: '1rem 3rem',
-              color: 'var(--text-main)',
-              fontSize: 'var(--font-body)',
-              letterSpacing: '0.1em',
-              cursor: 'pointer',
-              textTransform: 'uppercase',
-              marginTop: '1.5rem',
-            }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="btn btn-primary"
+            style={{ marginTop: '1.5rem', padding: '0.95rem 2.6rem' }}
           >
-            {isLast ? 'Estou pronto para continuar →' : 'Continuar →'}
+            {isLast ? 'Estou pronto para continuar' : 'Continuar'}
+            <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
           </motion.button>
         )}
       </AnimatePresence>

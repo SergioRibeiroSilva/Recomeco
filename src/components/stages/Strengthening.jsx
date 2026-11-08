@@ -1,19 +1,23 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Sprout, Leaf, Flower, Flower2, Trees, Sun, DoorOpen, BookOpen,
+  HeartHandshake, CloudRain, Hourglass, Moon, Sparkles,
+} from 'lucide-react';
 import { useJourney } from '../../context/JourneyContext';
 
 const AFFIRMATIONS = [
-  { text: "Você não precisa entender tudo agora.", emoji: "🌿" },
-  { text: "O fim de algo abre espaço para o que ainda não chegou.", emoji: "🚪" },
-  { text: "Sua história não acaba aqui. Ela recomeça.", emoji: "📖" },
-  { text: "Amor próprio não é egoísmo — é sobrevivência.", emoji: "❤️‍🔥" },
-  { text: "Você merece o mesmo cuidado que deu.", emoji: "🌸" },
-  { text: "Chorar não é fraqueza. É o coração se limpando.", emoji: "🌧️" },
-  { text: "Um dia de cada vez. Às vezes, uma hora de cada vez.", emoji: "⏳" },
-  { text: "Você é inteiro mesmo sem alguém ao lado.", emoji: "🌕" },
+  { text: "Você não precisa entender tudo agora.", Icon: Leaf },
+  { text: "O fim de algo abre espaço para o que ainda não chegou.", Icon: DoorOpen },
+  { text: "Sua história não acaba aqui. Ela recomeça.", Icon: BookOpen },
+  { text: "Amor próprio não é egoísmo — é sobrevivência.", Icon: HeartHandshake },
+  { text: "Você merece o mesmo cuidado que deu.", Icon: Flower2 },
+  { text: "Chorar não é fraqueza. É o coração se limpando.", Icon: CloudRain },
+  { text: "Um dia de cada vez. Às vezes, uma hora de cada vez.", Icon: Hourglass },
+  { text: "Você é inteiro mesmo sem alguém ao lado.", Icon: Moon },
 ];
 
-const GARDEN_ICONS = ['🌱', '🌿', '🌻', '🌸', '🌺', '🌹'];
+const GARDEN_ICONS = [Sprout, Leaf, Flower, Flower2, Trees, Sun];
 
 const FloatingIntention = ({ text, x, y, delay }) => (
   <motion.div
@@ -29,10 +33,12 @@ const FloatingIntention = ({ text, x, y, delay }) => (
       left: `${x}%`,
       top: `${y}%`,
       transform: 'translate(-50%, -50%)',
-      background: 'rgba(200,160,255,0.18)',
-      border: '1px solid rgba(200,160,255,0.35)',
-      borderRadius: '24px',
+      background: 'rgba(239,194,125,0.14)',
+      border: '1px solid rgba(239,194,125,0.4)',
+      borderRadius: 'var(--radius-pill)',
       padding: '0.7rem 1.4rem',
+      fontFamily: 'var(--font-serif)',
+      fontStyle: 'italic',
       fontSize: 'var(--font-body)',
       color: 'var(--text-main)',
       whiteSpace: 'nowrap',
@@ -53,8 +59,7 @@ const Strengthening = () => {
   const inputRef = useRef(null);
 
   const affirmation = AFFIRMATIONS[currentAffIdx];
-  const gardenEmoji = GARDEN_ICONS[Math.min(gardenStage, GARDEN_ICONS.length - 1)];
-
+  
   const handleAdd = (e) => {
     e.preventDefault();
     if (!inputValue.trim() || intentions.length >= 6) return;
@@ -106,22 +111,26 @@ const Strengthening = () => {
         <motion.div
           style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}
         >
-          {GARDEN_ICONS.slice(0, Math.min(gardenStage + 1, GARDEN_ICONS.length)).map((icon, i) => (
+          {GARDEN_ICONS.slice(0, Math.min(gardenStage + 1, GARDEN_ICONS.length)).map((GardenIcon, i) => (
             <motion.span
               key={i}
+              aria-hidden="true"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: 'spring', damping: 10 }}
-              style={{ fontSize: i === gardenStage ? '2rem' : '1.2rem' }}
+              style={{
+                display: 'flex',
+                color: i === gardenStage ? 'var(--color-gold-300)' : 'var(--color-sage-400)',
+              }}
             >
-              {icon}
+              <GardenIcon size={i === gardenStage ? 36 : 22} strokeWidth={1.5} />
             </motion.span>
           ))}
         </motion.div>
 
         <h2 style={{
           fontSize: 'var(--font-title)',
-          fontWeight: 300,
+          fontWeight: 500,
           color: 'var(--text-main)',
           lineHeight: 1.2,
         }}>
@@ -133,16 +142,22 @@ const Strengthening = () => {
           <motion.p
             key={currentAffIdx}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 0.9, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.65rem',
+              fontFamily: 'var(--font-serif)',
               fontSize: 'var(--font-subtitle)',
               fontStyle: 'italic',
               color: 'var(--text-primary)',
               lineHeight: 1.5,
             }}
           >
-            {affirmation.emoji} {affirmation.text}
+            <affirmation.Icon size={20} strokeWidth={1.6} aria-hidden="true" style={{ flexShrink: 0, color: 'var(--color-gold-300)' }} />
+            <span>{affirmation.text}</span>
           </motion.p>
         </AnimatePresence>
 
@@ -159,50 +174,29 @@ const Strengthening = () => {
               <input
                 ref={inputRef}
                 type="text"
+                className="field"
+                aria-label="Escreva uma intenção para cultivar"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 placeholder={`O que você quer cultivar? (${intentions.length}/3)`}
                 disabled={intentions.length >= 6}
-                style={{
-                  flex: 1,
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: '50px',
-                  padding: '0.8rem 1rem',
-                  color: 'var(--text-main)',
-                  fontSize: 'clamp(1.15rem, 3vw, 1.35rem)',
-                  outline: 'none',
-                  fontFamily: 'Outfit, sans-serif',
-                  transition: 'border 0.3s',
-                }}
-                onFocus={e => e.target.style.borderColor = 'rgba(200,160,255,0.6)'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.2)'}
               />
               <motion.button
                 type="submit"
+                aria-label="Plantar intenção"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 disabled={!inputValue.trim() || intentions.length >= 6}
-                style={{
-                  padding: '0.8rem 1.2rem',
-                  borderRadius: '50px',
-                  background: 'rgba(200,160,255,0.3)',
-                  border: '1px solid rgba(200,160,255,0.45)',
-                  color: 'var(--text-main)',
-                  cursor: 'pointer',
-                  fontSize: '1.2rem',
-                  opacity: !inputValue.trim() || intentions.length >= 6 ? 0.4 : 1,
-                  transition: 'opacity 0.3s',
-                }}
+                className="btn btn-primary btn-icon"
               >
-                🌱
+                <Sprout size={22} strokeWidth={2} aria-hidden="true" />
               </motion.button>
             </motion.form>
           )}
         </AnimatePresence>
 
         {/* Contador de intenções */}
-        <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
+        <p aria-live="polite" style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
           {intentions.length < 3
             ? `Digite mais ${3 - intentions.length} intenç${3 - intentions.length !== 1 ? 'ões' : 'ão'} e clique na mudinha para continuar`
             : '✓ Seu jardim está florescendo!'}
@@ -217,20 +211,11 @@ const Strengthening = () => {
               onClick={nextStage}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              style={{
-                padding: '1rem 3rem',
-                borderRadius: '50px',
-                background: 'linear-gradient(135deg, rgba(200,160,255,0.25), rgba(255,180,120,0.2))',
-                border: '1px solid rgba(255,255,255,0.3)',
-                color: 'var(--text-main)',
-                fontSize: 'var(--font-body)',
-                cursor: 'pointer',
-                letterSpacing: '0.05em',
-                fontFamily: 'Outfit, sans-serif',
-                fontWeight: 500,
-              }}
+              className="btn btn-primary"
+              style={{ padding: '1rem 2.4rem' }}
             >
-              Clique aqui se está pronto para o recomeço ✨
+              Clique aqui se está pronto para o recomeço
+              <Sparkles size={20} strokeWidth={2} aria-hidden="true" />
             </motion.button>
           )}
         </AnimatePresence>

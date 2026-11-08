@@ -1,29 +1,30 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useJourney } from '../context/JourneyContext';
 
+// Da noite profunda ao amanhecer dourado
 const STAGE_BG_COLORS = [
-  ['#0a0a12', '#12121e'],
-  ['#0e0a18', '#1a1028'],
-  ['#120a1e', '#201530'],
-  ['#180a28', '#2a1540'],
-  ['#1e0a2a', '#3a1a50'],
-  ['#2a1a1a', '#4a2a2a'],
+  ['#070b16', '#0f1730'],
+  ['#0a1020', '#18223d'],
+  ['#0e1226', '#272444'],
+  ['#0a1a24', '#16363f'],
+  ['#0f1d1f', '#2c4036'],
+  ['#2a1710', '#7a3f26'],
 ];
 
 const ORBS = [
-  [{ color: 'rgba(80,60,120,0.15)', x: '-10%', y: '-10%', size: '50vw' },
-   { color: 'rgba(60,40,100,0.12)', x: '70%', y: '60%', size: '40vw' }],
-  [{ color: 'rgba(100,60,160,0.18)', x: '-5%', y: '-5%', size: '55vw' },
-   { color: 'rgba(80,50,140,0.15)', x: '60%', y: '50%', size: '45vw' }],
-  [{ color: 'rgba(120,70,180,0.2)', x: '-15%', y: '20%', size: '50vw' },
-   { color: 'rgba(100,80,160,0.18)', x: '65%', y: '-10%', size: '45vw' }],
-  [{ color: 'rgba(150,80,200,0.22)', x: '10%', y: '-15%', size: '55vw' },
-   { color: 'rgba(120,60,180,0.2)', x: '55%', y: '60%', size: '50vw' }],
-  [{ color: 'rgba(200,100,200,0.25)', x: '-10%', y: '10%', size: '60vw' },
-   { color: 'rgba(180,80,180,0.22)', x: '60%', y: '-20%', size: '55vw' }],
-  [{ color: 'rgba(255,160,80,0.3)', x: '-5%', y: '-5%', size: '60vw' },
-   { color: 'rgba(255,120,100,0.25)', x: '50%', y: '40%', size: '55vw' }],
+  [{ color: 'rgba(90,110,190,0.16)', x: '-10%', y: '-10%', size: '50vw' },
+   { color: 'rgba(60,80,150,0.14)', x: '70%', y: '60%', size: '40vw' }],
+  [{ color: 'rgba(100,120,200,0.18)', x: '-5%', y: '-5%', size: '55vw' },
+   { color: 'rgba(120,100,170,0.14)', x: '60%', y: '50%', size: '45vw' }],
+  [{ color: 'rgba(150,120,190,0.2)', x: '-15%', y: '20%', size: '50vw' },
+   { color: 'rgba(220,150,150,0.12)', x: '65%', y: '-10%', size: '45vw' }],
+  [{ color: 'rgba(80,170,180,0.2)', x: '10%', y: '-15%', size: '55vw' },
+   { color: 'rgba(110,150,210,0.16)', x: '55%', y: '60%', size: '50vw' }],
+  [{ color: 'rgba(150,200,160,0.2)', x: '-10%', y: '10%', size: '60vw' },
+   { color: 'rgba(239,194,125,0.16)', x: '60%', y: '-20%', size: '55vw' }],
+  [{ color: 'rgba(255,190,110,0.34)', x: '-5%', y: '-5%', size: '60vw' },
+   { color: 'rgba(255,140,110,0.26)', x: '50%', y: '40%', size: '55vw' }],
 ];
 
 const AnimatedBackground = () => {

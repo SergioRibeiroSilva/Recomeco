@@ -64,7 +64,7 @@ const JourneyApp = () => {
       height: '100vh',
       overflow: 'hidden',
       position: 'relative',
-      fontFamily: 'Outfit, sans-serif',
+      fontFamily: 'var(--font-sans)',
     }}>
       {/* Camada 1: Fundo animado */}
       <AnimatedBackground />

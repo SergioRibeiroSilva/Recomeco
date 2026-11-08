@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, Sparkles, Flame, Sun } from 'lucide-react';
 import { useJourney } from '../../context/JourneyContext';
 
 const HEART_PATH =
@@ -7,10 +8,10 @@ const HEART_PATH =
 
 // Peças do coração — posição inicial será calculada dinamicamente
 const PIECE_DEFS = [
-  { id: 'tl', label: 'Confiança', emoji: '🤍', clipPath: 'polygon(0% 0%, 50% 0%, 50% 55%, 0% 40%)', quadrant: [-1, -1] },
-  { id: 'tr', label: 'Sonhos', emoji: '✨', clipPath: 'polygon(50% 0%, 100% 0%, 100% 40%, 50% 55%)', quadrant: [1, -1] },
-  { id: 'bl', label: 'Coragem', emoji: '🔥', clipPath: 'polygon(0% 40%, 50% 55%, 50% 100%, 0% 100%)', quadrant: [-1, 1] },
-  { id: 'br', label: 'Esperança', emoji: '🌟', clipPath: 'polygon(50% 55%, 100% 40%, 100% 100%, 50% 100%)', quadrant: [1, 1] },
+  { id: 'tl', label: 'Confiança', Icon: ShieldCheck, clipPath: 'polygon(0% 0%, 50% 0%, 50% 55%, 0% 40%)', quadrant: [-1, -1] },
+  { id: 'tr', label: 'Sonhos', Icon: Sparkles, clipPath: 'polygon(50% 0%, 100% 0%, 100% 40%, 50% 55%)', quadrant: [1, -1] },
+  { id: 'bl', label: 'Coragem', Icon: Flame, clipPath: 'polygon(0% 40%, 50% 55%, 50% 100%, 0% 100%)', quadrant: [-1, 1] },
+  { id: 'br', label: 'Esperança', Icon: Sun, clipPath: 'polygon(50% 55%, 100% 40%, 100% 100%, 50% 100%)', quadrant: [1, 1] },
 ];
 
 // ─── Peça individual ──────────────────────────────────────────────────────────
@@ -98,7 +99,7 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
         touchAction: 'none',
         userSelect: 'none',
         filter: dragging
-          ? 'drop-shadow(0 0 20px rgba(200,160,255,0.6))'
+          ? 'drop-shadow(0 0 22px rgba(239,194,125,0.65))'
           : 'drop-shadow(0 4px 14px rgba(0,0,0,0.5))',
         width: `${pieceSize}px`,
         height: `${pieceSize}px`,
@@ -106,7 +107,7 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
     >
       <svg width={pieceSize} height={pieceSize} viewBox="0 0 400 340" style={{ display: 'block', pointerEvents: 'none' }}>
         <g style={{ clipPath: piece.clipPath }}>
-          <path d={HEART_PATH} fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.35)" strokeWidth="3" />
+          <path d={HEART_PATH} fill="rgba(188,211,242,0.14)" stroke="rgba(188,211,242,0.6)" strokeWidth="3" />
         </g>
       </svg>
       {/* Label */}
@@ -115,8 +116,8 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         pointerEvents: 'none', gap: '3px',
       }}>
-        <span style={{ fontSize: `${pieceSize * 0.22}px` }}>{piece.emoji}</span>
-        <span style={{ fontSize: `${Math.max(pieceSize * 0.085, 12)}px`, color: 'var(--text-primary)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 500 }}>
+        <piece.Icon size={Math.max(pieceSize * 0.2, 18)} strokeWidth={1.6} color="#f6d9a6" aria-hidden="true" />
+        <span style={{ fontSize: `${Math.max(pieceSize * 0.085, 12)}px`, color: 'var(--text-main)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 }}>
           {piece.label}
         </span>
       </div>
@@ -194,19 +195,20 @@ const Kintsugi = () => {
       >
         <h2 style={{
           fontSize: 'var(--font-title)',
-          fontWeight: 300,
+          fontWeight: 500,
           color: 'var(--text-main)',
           marginBottom: '0.3rem',
           lineHeight: 1.3,
         }}>
           Junte os pedaços. Reconstrua-se.
         </h2>
-        <p style={{ fontSize: 'var(--font-subtitle)', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.25rem' }}>
+        <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
           Arraste cada fragmento para o centro do coração.
         </p>
         <motion.p
-          animate={{ color: snapped.length > 0 ? 'rgba(200,160,255,0.95)' : 'var(--text-muted)' }}
-          style={{ fontSize: 'var(--font-small)', letterSpacing: '0.1em' }}
+          animate={{ color: snapped.length > 0 ? '#f6d9a6' : 'rgba(251,244,234,0.68)' }}
+          className="t-eyebrow"
+          aria-live="polite"
         >
           {snapped.length} / {PIECE_DEFS.length} peças reunidas
         </motion.p>
@@ -234,8 +236,8 @@ const Kintsugi = () => {
           <svg width={heartDisplaySize} height={heartDisplaySize * 0.92} viewBox="0 0 400 340">
             <path
               d={HEART_PATH}
-              fill="rgba(255,255,255,0.02)"
-              stroke="rgba(255,255,255,0.12)"
+              fill="rgba(246,217,166,0.04)"
+              stroke="rgba(246,217,166,0.4)"
               strokeWidth="2"
               strokeDasharray="10 5"
             />
@@ -257,7 +259,7 @@ const Kintsugi = () => {
                 width={pieceSize} height={pieceSize} viewBox="0 0 400 340"
               >
                 <g style={{ clipPath: piece.clipPath }}>
-                  <path d={HEART_PATH} fill="rgba(255,215,0,0.18)" stroke="rgba(255,215,0,0.85)" strokeWidth="3" />
+                  <path d={HEART_PATH} fill="rgba(239,194,125,0.22)" stroke="#efc27d" strokeWidth="3" />
                 </g>
               </motion.svg>
             </div>
@@ -294,8 +296,8 @@ const Kintsugi = () => {
               gap: '0.4rem',
             }}
           >
-            <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ fontSize: '2.2rem' }}>✨</motion.span>
-            <p style={{ fontSize: 'var(--font-subtitle)', color: 'rgba(255,215,0,0.98)', fontStyle: 'italic', fontWeight: 300, maxWidth: '340px' }}>
+            <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ display: 'flex', color: '#efc27d' }}><Sparkles size={34} strokeWidth={1.5} aria-hidden="true" /></motion.span>
+            <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: '#f6d9a6', fontStyle: 'italic', fontWeight: 500, maxWidth: '340px' }}>
               "Uma vez provado, o ouro brilha mais forte."
             </p>
             <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-secondary)', letterSpacing: '0.07em' }}>

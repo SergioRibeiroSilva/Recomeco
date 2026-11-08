@@ -1,6 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Wind, Pause, Feather } from 'lucide-react';
 import { useJourney } from '../../context/JourneyContext';
+
+const PHASE_ICONS = { inhale: Wind, hold: Pause, exhale: Feather };
 
 const Breather = () => {
   const { nextStage } = useJourney();
@@ -130,7 +133,7 @@ const Breather = () => {
               animate={{ opacity: 1, y: 0 }}
               style={{
                 fontSize: 'var(--font-title)',
-                fontWeight: 300,
+                fontWeight: 500,
                 color: 'var(--text-main)',
               }}
             >
@@ -138,22 +141,22 @@ const Breather = () => {
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.85 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
-              style={{ fontSize: 'var(--font-subtitle)', fontStyle: 'italic', color: 'var(--text-secondary)' }}
+              style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', fontStyle: 'italic', color: 'var(--text-secondary)' }}
             >
               Coloque o dedo na tela e mova o cursor para afastar as nuvens pesadas.
             </motion.p>
 
             {/* Barra de progresso de névoa */}
-            <div style={{ width: '200px', height: '2px', background: 'rgba(255,255,255,0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
+            <div style={{ width: '220px', height: '4px', background: 'var(--surface-3)', borderRadius: '9999px', overflow: 'hidden' }}>
               <motion.div
                 animate={{ width: `${cleared}%` }}
-                style={{ height: '100%', background: 'linear-gradient(to right, rgba(180,140,255,0.6), rgba(255,220,180,0.8))', borderRadius: '9999px' }}
+                style={{ height: '100%', background: 'linear-gradient(to right, var(--color-sky-300), var(--color-gold-300))', borderRadius: '9999px' }}
               />
             </div>
 
-            <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.1em' }}>
+            <p className="t-eyebrow" aria-live="polite" style={{ color: 'var(--text-primary)' }}>
               {Math.round(cleared)}% da névoa dissipada
             </p>
           </motion.div>
@@ -175,8 +178,9 @@ const Breather = () => {
           >
             <motion.p
               initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 0.8, y: 0 }}
-              style={{ fontSize: 'var(--font-small)', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}
+              animate={{ opacity: 1, y: 0 }}
+              className="t-eyebrow"
+              style={{ color: 'var(--color-gold-300)' }}
             >
               Exercício de Respiração · {breathCount}/2 ciclos
             </motion.p>
@@ -195,7 +199,7 @@ const Breather = () => {
                   width: '220px',
                   height: '220px',
                   borderRadius: '50%',
-                  border: '2px solid rgba(200,160,255,0.3)',
+                  border: '2px solid rgba(188,211,242,0.45)',
                 }}
               />
               {/* Anel médio */}
@@ -203,10 +207,10 @@ const Breather = () => {
                 animate={{
                   scale: breathPhase === 'exhale' ? 0.7 : breathPhase === 'hold' ? 1.1 : 1,
                   backgroundColor: breathPhase === 'inhale'
-                    ? 'rgba(160,120,255,0.15)'
+                    ? 'rgba(140,200,215,0.18)'
                     : breathPhase === 'hold'
-                    ? 'rgba(180,140,255,0.2)'
-                    : 'rgba(120,180,255,0.12)',
+                    ? 'rgba(239,194,125,0.22)'
+                    : 'rgba(150,185,235,0.14)',
                 }}
                 transition={{ duration: breathPhase === 'inhale' ? 4 : breathPhase === 'exhale' ? 4 : 0.2, ease: 'easeInOut' }}
                 style={{
@@ -214,7 +218,7 @@ const Breather = () => {
                   width: '160px',
                   height: '160px',
                   borderRadius: '50%',
-                  border: '1px solid rgba(200,160,255,0.2)',
+                  border: '1px solid rgba(188,211,242,0.35)',
                 }}
               />
               {/* Centro */}
@@ -227,15 +231,14 @@ const Breather = () => {
                   width: '80px',
                   height: '80px',
                   borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(200,160,255,0.4), rgba(160,120,255,0.1))',
+                  background: 'radial-gradient(circle, rgba(246,217,166,0.55), rgba(140,200,215,0.12))',
+                  color: '#fbf4ea',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <span style={{ fontSize: '1.6rem' }}>
-                  {breathPhase === 'inhale' ? '🌬️' : breathPhase === 'hold' ? '🫁' : '😮‍💨'}
-                </span>
+                {React.createElement(PHASE_ICONS[breathPhase], { size: 30, strokeWidth: 1.6, 'aria-hidden': true })}
               </motion.div>
             </div>
 
@@ -247,7 +250,7 @@ const Breather = () => {
                 exit={{ opacity: 0, y: -10 }}
                 style={{ textAlign: 'center' }}
               >
-                <p style={{ fontSize: 'var(--font-hero)', fontWeight: 300, color: 'var(--text-main)' }}>
+                <p aria-live="polite" style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-hero)', fontWeight: 400, color: 'var(--text-main)' }}>
                   {phaseText.text}
                 </p>
                 <p style={{ fontSize: 'var(--font-body)', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
@@ -266,7 +269,7 @@ const Breather = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle, transparent 0%, rgba(10,5,20,0.7) 100%)',
+            background: 'radial-gradient(circle, transparent 0%, rgba(7,16,26,0.78) 100%)',
             backdropFilter: `blur(${(1 - cleared / 100) * 20}px)`,
             pointerEvents: 'none',
           }}
@@ -288,7 +291,7 @@ const Breather = () => {
             width: '300px',
             height: '300px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,235,180,0.35) 0%, rgba(200,160,255,0.18) 35%, rgba(200,160,255,0.05) 60%, transparent 80%)',
+            background: 'radial-gradient(circle, rgba(255,230,170,0.4) 0%, rgba(188,211,242,0.2) 35%, rgba(188,211,242,0.05) 60%, transparent 80%)',
             pointerEvents: 'none',
             zIndex: 15,
             mixBlendMode: 'screen',
@@ -308,7 +311,7 @@ const Breather = () => {
             width: `${Math.random() * 3 + 1}px`,
             height: `${Math.random() * 3 + 1}px`,
             borderRadius: '50%',
-            backgroundColor: 'white',
+            backgroundColor: '#fbf4ea',
             pointerEvents: 'none',
           }}
         />

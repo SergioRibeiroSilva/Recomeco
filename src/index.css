@@ -1,1 +1,60 @@
 @import './styles/theme.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Fundo só no html: o body precisa ficar transparente para a camada
+   animada (z-index: -1) do AnimatedBackground aparecer. */
+html {
+  background: var(--color-night-900);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Scrollbar invisível para elementos internos se necessário */
+::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Seleção de texto suave */
+::selection {
+  background: rgba(239, 194, 125, 0.35);
+  color: #fff;
+}
+
+button {
+  font-family: var(--font-sans);
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+input {
+  font-family: var(--font-sans);
+}
