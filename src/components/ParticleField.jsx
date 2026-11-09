@@ -125,6 +125,7 @@ const ParticleField = () => {
       reduceMotion = e.matches;
       cancelAnimationFrame(animId);
       if (reduceMotion) {
+        ctx.clearRect(0, 0, width, height);
         window.removeEventListener('mousemove', handleMouseMove);
         mouseRef.current = { x: -999, y: -999 };
       } else {

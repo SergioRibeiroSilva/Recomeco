@@ -20,6 +20,7 @@ const Final = () => {
   const rootRef = useRef(null);
 
   useEffect(() => {
+    if (done) return; // cartão já exibido: não agenda mais timers
     if (msgIdx < MESSAGES.length - 1) {
       const t = setTimeout(() => setMsgIdx(i => i + 1), 2200);
       return () => clearTimeout(t);
@@ -27,7 +28,7 @@ const Final = () => {
       const t = setTimeout(() => setDone(true), 2000);
       return () => clearTimeout(t);
     }
-  }, [msgIdx]);
+  }, [msgIdx, done]);
 
   useEffect(() => {
     if (!done) return;

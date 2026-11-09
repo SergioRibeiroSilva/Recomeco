@@ -5,12 +5,24 @@ import { useJourney } from '../../context/journeyContextObject';
 
 import { HEART_PATH, HEART_VIEWBOX } from '../../data/shared';
 
+// Geometria das emendas: fonte única para os recortes e para a veia dourada
+const VB_W = HEART_VIEWBOX.width;
+const VB_H = HEART_VIEWBOX.height;
+const SEAM_CENTER_PCT = 55; // altura (%) do ponto central das emendas
+const SEAM_SIDE_PCT = 40;   // altura (%) das emendas nas laterais
+const SEAM_CENTER_Y = (VB_H * SEAM_CENTER_PCT) / 100;
+const SEAM_SIDE_Y = (VB_H * SEAM_SIDE_PCT) / 100;
+const HEART_VIEWBOX_ATTR = `0 0 ${VB_W} ${VB_H}`;
+const VEIN_PATH =
+  `M ${VB_W / 2} 60 L ${VB_W / 2} ${SEAM_CENTER_Y} L ${VB_W / 2} 320 ` +
+  `M 40 ${SEAM_SIDE_Y} L ${VB_W / 2} ${SEAM_CENTER_Y} L 360 ${SEAM_SIDE_Y}`;
+
 // Peças do coração — posição inicial e centro do rótulo por quadrante
 const PIECE_DEFS = [
-  { id: 'tl', label: 'Confiança', Icon: ShieldCheck, clipPath: 'polygon(0% 0%, 50% 0%, 50% 55%, 0% 40%)', quadrant: [-1, -1], labelPos: { left: '28%', top: '26%' } },
-  { id: 'tr', label: 'Sonhos', Icon: Sparkles, clipPath: 'polygon(50% 0%, 100% 0%, 100% 40%, 50% 55%)', quadrant: [1, -1], labelPos: { left: '72%', top: '26%' } },
-  { id: 'bl', label: 'Coragem', Icon: Flame, clipPath: 'polygon(0% 40%, 50% 55%, 50% 100%, 0% 100%)', quadrant: [-1, 1], labelPos: { left: '33%', top: '65%' } },
-  { id: 'br', label: 'Esperança', Icon: Sun, clipPath: 'polygon(50% 55%, 100% 40%, 100% 100%, 50% 100%)', quadrant: [1, 1], labelPos: { left: '67%', top: '65%' } },
+  { id: 'tl', label: 'Confiança', Icon: ShieldCheck, clipPath: `polygon(0% 0%, 50% 0%, 50% ${SEAM_CENTER_PCT}%, 0% ${SEAM_SIDE_PCT}%)`, quadrant: [-1, -1], labelPos: { left: '28%', top: '26%' } },
+  { id: 'tr', label: 'Sonhos', Icon: Sparkles, clipPath: `polygon(50% 0%, 100% 0%, 100% ${SEAM_SIDE_PCT}%, 50% ${SEAM_CENTER_PCT}%)`, quadrant: [1, -1], labelPos: { left: '72%', top: '26%' } },
+  { id: 'bl', label: 'Coragem', Icon: Flame, clipPath: `polygon(0% ${SEAM_SIDE_PCT}%, 50% ${SEAM_CENTER_PCT}%, 50% 100%, 0% 100%)`, quadrant: [-1, 1], labelPos: { left: '33%', top: '65%' } },
+  { id: 'br', label: 'Esperança', Icon: Sun, clipPath: `polygon(50% ${SEAM_CENTER_PCT}%, 100% ${SEAM_SIDE_PCT}%, 100% 100%, 50% 100%)`, quadrant: [1, 1], labelPos: { left: '67%', top: '65%' } },
 ];
 
 // ─── Peça individual ──────────────────────────────────────────────────────────
@@ -138,7 +150,7 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, heartW, heartH }
         height: `${heartH}px`,
       }}
     >
-      <svg width={heartW} height={heartH} viewBox="0 0 400 340" style={{ display: 'block', pointerEvents: 'none' }}>
+      <svg width={heartW} height={heartH} viewBox={HEART_VIEWBOX_ATTR} style={{ display: 'block', pointerEvents: 'none' }}>
         <g style={{ clipPath: piece.clipPath }}>
           <path d={HEART_PATH} fill="rgba(201,139,110,0.26)" stroke="rgba(59,47,42,0.55)" strokeWidth="3" />
         </g>
@@ -278,7 +290,7 @@ const Kintsugi = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           pointerEvents: 'none', zIndex: 5,
         }}>
-          <svg width={heartW} height={heartH} viewBox="0 0 400 340">
+          <svg width={heartW} height={heartH} viewBox={HEART_VIEWBOX_ATTR}>
             <path
               d={HEART_PATH}
               fill="rgba(169,119,47,0.06)"
@@ -301,7 +313,7 @@ const Kintsugi = () => {
             }}>
               <motion.svg
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                width={heartW} height={heartH} viewBox="0 0 400 340"
+                width={heartW} height={heartH} viewBox={HEART_VIEWBOX_ATTR}
               >
                 <g style={{ clipPath: piece.clipPath }}>
                   <path d={HEART_PATH} fill="rgba(169,119,47,0.28)" stroke="#a9772f" strokeWidth="3" />
@@ -322,10 +334,10 @@ const Kintsugi = () => {
             <motion.svg
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
-              width={heartW} height={heartH} viewBox="0 0 400 340"
+              width={heartW} height={heartH} viewBox={HEART_VIEWBOX_ATTR}
             >
               <path
-                d="M 200 60 L 200 187 L 200 320 M 40 136 L 200 187 L 360 136"
+                d={VEIN_PATH}
                 fill="none"
                 stroke="#a9772f"
                 strokeWidth="3.5"

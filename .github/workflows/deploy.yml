@@ -15,8 +15,10 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  # Deploys (push/dispatch) compartilham um único grupo e nunca cancelam um deploy em andamento;
+  # PRs ficam em grupos próprios por ref e podem ser cancelados.
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -56,7 +58,7 @@ jobs:
 
   deploy:
     name: Deploy
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:

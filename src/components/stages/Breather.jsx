@@ -16,6 +16,15 @@ const Breather = () => {
   const nextStageRef = useRef(nextStage);
   useEffect(() => { nextStageRef.current = nextStage; }, [nextStage]);
 
+  // Garante que a etapa avance uma única vez (clique duplo, clique + timer final)
+  const advancedRef = useRef(false);
+  const advance = useCallback(() => {
+    if (advancedRef.current) return;
+    advancedRef.current = true;
+    clearTimeout(intervalRef.current);
+    nextStageRef.current();
+  }, []);
+
   // Estrelas geradas uma única vez (evita piscar a cada render)
   const [stars] = useState(() =>
     Array.from({ length: 30 }, () => ({
@@ -86,7 +95,7 @@ const Breather = () => {
           setBreathCount(cycles);
           if (cycles >= 2) {
             // Termina o exercício: um único timeout, limpo no unmount
-            intervalRef.current = setTimeout(() => nextStageRef.current(), 1000);
+            intervalRef.current = setTimeout(advance, 1000);
             return;
           }
         }
@@ -96,7 +105,7 @@ const Breather = () => {
 
     runPhase();
     return () => clearTimeout(intervalRef.current);
-  }, [mode]);
+  }, [mode, advance]);
 
   const phaseText = {
     inhale: { text: 'Inspire', sub: '4 segundos', scale: 1.4 },
@@ -201,14 +210,17 @@ const Breather = () => {
               textAlign: 'center',
             }}
           >
-            <motion.h1
+            <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="t-eyebrow"
-              style={{ color: 'var(--clay-dark)' }}
             >
-              Exercício de Respiração · Ciclo {Math.min(breathCount + 1, 2)} de 2
-            </motion.h1>
+              <h1 className="sr-only">Exercício de respiração</h1>
+              <p className="t-eyebrow" aria-live="polite" style={{ color: 'var(--clay-dark)' }}>
+                {breathCount >= 2
+                  ? 'Exercício de Respiração · Concluído'
+                  : `Exercício de Respiração · Ciclo ${breathCount + 1} de 2`}
+              </p>
+            </motion.div>
 
             {/* Círculo pulsante */}
             <div style={{ position: 'relative', width: '220px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -287,10 +299,7 @@ const Breather = () => {
             <button
               type="button"
               className="btn"
-              onClick={() => {
-                clearTimeout(intervalRef.current);
-                nextStageRef.current();
-              }}
+              onClick={advance}
               style={{ fontSize: 'var(--font-small)', padding: '0.6rem 1.4rem', minHeight: '40px' }}
             >
               Avançar no meu ritmo

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sprout, Leaf, Flower, Flower2, Trees, Sun, DoorOpen, BookOpen,
@@ -73,6 +73,7 @@ const Strengthening = () => {
   const [inputValue, setInputValue] = useState('');
   const [currentAffIdx, setCurrentAffIdx] = useState(0);
   const inputRef = useRef(null);
+  const focusInputRef = useRef(false);
 
   const affirmation = AFFIRMATIONS[currentAffIdx];
   const gardenStage = Math.min(intentions.length, GARDEN_ICONS.length - 1);
@@ -91,8 +92,16 @@ const Strengthening = () => {
 
   const handleRemove = (id) => {
     setIntentions(prev => prev.filter(item => item.id !== id));
-    setTimeout(() => inputRef.current?.focus(), 50);
+    focusInputRef.current = true;
   };
+
+  // Devolve o foco ao campo depois que a remoção é renderizada (sem timer)
+  useEffect(() => {
+    if (focusInputRef.current) {
+      focusInputRef.current = false;
+      inputRef.current?.focus();
+    }
+  }, [intentions]);
 
   const canProceed = intentions.length >= MIN_INTENTIONS;
 

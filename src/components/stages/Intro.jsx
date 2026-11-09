@@ -101,7 +101,7 @@ const Intro = () => {
       {/* Cards de Humor */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', // sempre 2x2 equilibrado
         gap: '0.85rem',
         width: '100%',
       }}>

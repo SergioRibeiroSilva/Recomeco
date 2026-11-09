@@ -154,6 +154,7 @@ const DawnCard = () => {
 
   useEffect(() => {
     let cancelled = false;
+    renderedCanvasRef.current = null; // invalida o cache quando mood/intenções mudam
     build()
       .then((canvas) => {
         if (!cancelled) {

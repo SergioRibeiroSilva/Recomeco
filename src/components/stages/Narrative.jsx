@@ -244,6 +244,21 @@ const Narrative = () => {
             “<TypewriterText text={chapter.text} skip={isTypingSkipped} />”
           </motion.p>
 
+          {/* Alternativa por teclado/leitor de tela para pular a digitação */}
+          {!optionsReady && (
+            <button
+              type="button"
+              className="btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSkippedChapter(chapterIndex);
+              }}
+              style={{ alignSelf: 'center', fontSize: 'var(--font-small)', padding: '0.4rem 1rem', minHeight: '36px' }}
+            >
+              Mostrar texto completo
+            </button>
+          )}
+
           {/* Sub-frase */}
           <motion.p
             initial={{ opacity: 0 }}
@@ -274,7 +289,7 @@ const Narrative = () => {
               </p>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
                 gap: '0.75rem',
               }}>
                 {chapter.options.map(opt => (
