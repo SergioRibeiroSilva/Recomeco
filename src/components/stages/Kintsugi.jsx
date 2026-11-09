@@ -3,18 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Sparkles, Flame, Sun } from 'lucide-react';
 import { useJourney } from '../../context/journeyContextObject';
 
-import { HEART_PATH } from '../../data/shared';
+import { HEART_PATH, HEART_VIEWBOX } from '../../data/shared';
 
-// Peças do coração — posição inicial será calculada dinamicamente
+// Peças do coração — posição inicial e centro do rótulo por quadrante
 const PIECE_DEFS = [
-  { id: 'tl', label: 'Confiança', Icon: ShieldCheck, clipPath: 'polygon(0% 0%, 50% 0%, 50% 55%, 0% 40%)', quadrant: [-1, -1] },
-  { id: 'tr', label: 'Sonhos', Icon: Sparkles, clipPath: 'polygon(50% 0%, 100% 0%, 100% 40%, 50% 55%)', quadrant: [1, -1] },
-  { id: 'bl', label: 'Coragem', Icon: Flame, clipPath: 'polygon(0% 40%, 50% 55%, 50% 100%, 0% 100%)', quadrant: [-1, 1] },
-  { id: 'br', label: 'Esperança', Icon: Sun, clipPath: 'polygon(50% 55%, 100% 40%, 100% 100%, 50% 100%)', quadrant: [1, 1] },
+  { id: 'tl', label: 'Confiança', Icon: ShieldCheck, clipPath: 'polygon(0% 0%, 50% 0%, 50% 55%, 0% 40%)', quadrant: [-1, -1], labelPos: { left: '28%', top: '26%' } },
+  { id: 'tr', label: 'Sonhos', Icon: Sparkles, clipPath: 'polygon(50% 0%, 100% 0%, 100% 40%, 50% 55%)', quadrant: [1, -1], labelPos: { left: '72%', top: '26%' } },
+  { id: 'bl', label: 'Coragem', Icon: Flame, clipPath: 'polygon(0% 40%, 50% 55%, 50% 100%, 0% 100%)', quadrant: [-1, 1], labelPos: { left: '33%', top: '65%' } },
+  { id: 'br', label: 'Esperança', Icon: Sun, clipPath: 'polygon(50% 55%, 100% 40%, 100% 100%, 50% 100%)', quadrant: [1, 1], labelPos: { left: '67%', top: '65%' } },
 ];
 
 // ─── Peça individual ──────────────────────────────────────────────────────────
-const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => {
+const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, heartW, heartH }) => {
   // null = peça na posição inicial (acompanha resize sem precisar de effect)
   const [dragOffset, setDragOffset] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -134,23 +134,35 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
         filter: dragging
           ? 'drop-shadow(0 8px 14px rgba(59,47,42,0.30))'
           : 'drop-shadow(0 3px 8px rgba(59,47,42,0.22))',
-        width: `${pieceSize}px`,
-        height: `${pieceSize}px`,
+        width: `${heartW}px`,
+        height: `${heartH}px`,
       }}
     >
-      <svg width={pieceSize} height={pieceSize} viewBox="0 0 400 340" style={{ display: 'block', pointerEvents: 'none' }}>
+      <svg width={heartW} height={heartH} viewBox="0 0 400 340" style={{ display: 'block', pointerEvents: 'none' }}>
         <g style={{ clipPath: piece.clipPath }}>
-          <path d={HEART_PATH} fill="rgba(201,139,110,0.22)" stroke="rgba(59,47,42,0.5)" strokeWidth="3" />
+          <path d={HEART_PATH} fill="rgba(201,139,110,0.26)" stroke="rgba(59,47,42,0.55)" strokeWidth="3" />
         </g>
       </svg>
-      {/* Label */}
+      {/* Label posicionada no centro do respectivo fragmento */}
       <div style={{
-        position: 'absolute', inset: 0,
+        position: 'absolute',
+        left: piece.labelPos.left,
+        top: piece.labelPos.top,
+        transform: 'translate(-50%, -50%)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        pointerEvents: 'none', gap: '3px',
+        pointerEvents: 'none', gap: '2px',
       }}>
-        <piece.Icon size={Math.max(pieceSize * 0.2, 18)} strokeWidth={1.6} color="#8a4730" aria-hidden="true" />
-        <span style={{ fontSize: `${Math.max(pieceSize * 0.085, 12)}px`, color: 'var(--text-main)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 }}>
+        <piece.Icon size={Math.max(heartW * 0.12, 16)} strokeWidth={1.7} color="#8a4730" aria-hidden="true" />
+        <span style={{
+          fontSize: `${Math.max(heartW * 0.055, 11)}px`,
+          color: 'var(--text-main)',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          fontWeight: 700,
+          background: 'rgba(255, 251, 244, 0.85)',
+          padding: '1px 6px',
+          borderRadius: '999px',
+        }}>
           {piece.label}
         </span>
       </div>
@@ -179,10 +191,11 @@ const Kintsugi = () => {
     return () => obs.disconnect();
   }, []);
 
-  // Posições iniciais calculadas dinamicamente: 30% da metade da área para não sair da tela no mobile
-  const spread = { x: dims.w * 0.30, y: dims.h * 0.30 };
-  const pieceSize = Math.min(dims.w, dims.h) * 0.44; // peça = 44% do menor lado
-  const snapRadius = pieceSize * 0.55; // zona de snap generosa
+  // Posições iniciais e dimensões unificadas (proporção 400:340) para alvo e peças
+  const spread = { x: dims.w * 0.28, y: dims.h * 0.28 };
+  const heartW = Math.min(dims.w * 0.52, dims.h * 0.52, 230);
+  const heartH = heartW * (HEART_VIEWBOX.height / HEART_VIEWBOX.width);
+  const snapRadius = heartW * 0.55; // zona de snap generosa
 
   const getInitOffset = (quadrant) => ({
     x: quadrant[0] * spread.x,
@@ -199,9 +212,6 @@ const Kintsugi = () => {
     const t = setTimeout(nextStage, 3000);
     return () => clearTimeout(t);
   }, [allSnapped, nextStage]);
-
-  // Tamanho do SVG do coração alvo (proporcional ao container)
-  const heartDisplaySize = Math.min(dims.w * 0.55, dims.h * 0.55, 220);
 
   return (
     <motion.div
@@ -228,7 +238,7 @@ const Kintsugi = () => {
         transition={{ delay: 0.3 }}
         style={{ textAlign: 'center', marginBottom: '1rem', zIndex: 20, flexShrink: 0 }}
       >
-        <h2 style={{
+        <h1 style={{
           fontSize: 'var(--font-title)',
           fontWeight: 500,
           color: 'var(--text-main)',
@@ -236,7 +246,7 @@ const Kintsugi = () => {
           lineHeight: 1.3,
         }}>
           Junte os pedaços. Reconstrua-se.
-        </h2>
+        </h1>
         <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: 'var(--text-secondary)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
           Arraste cada fragmento e comece a reconstrução.
         </p>
@@ -268,7 +278,7 @@ const Kintsugi = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           pointerEvents: 'none', zIndex: 5,
         }}>
-          <svg width={heartDisplaySize} height={heartDisplaySize * 0.92} viewBox="0 0 400 340">
+          <svg width={heartW} height={heartH} viewBox="0 0 400 340">
             <path
               d={HEART_PATH}
               fill="rgba(169,119,47,0.06)"
@@ -287,11 +297,11 @@ const Kintsugi = () => {
               position: 'absolute', left: '50%', top: '50%',
               transform: `translate(-50%, -50%)`,
               pointerEvents: 'none', zIndex: 6,
-              width: `${pieceSize}px`, height: `${pieceSize}px`,
+              width: `${heartW}px`, height: `${heartH}px`,
             }}>
               <motion.svg
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                width={pieceSize} height={pieceSize} viewBox="0 0 400 340"
+                width={heartW} height={heartH} viewBox="0 0 400 340"
               >
                 <g style={{ clipPath: piece.clipPath }}>
                   <path d={HEART_PATH} fill="rgba(169,119,47,0.28)" stroke="#a9772f" strokeWidth="3" />
@@ -301,6 +311,30 @@ const Kintsugi = () => {
           );
         })}
 
+        {/* Veios de ouro Kintsugi quando todas as peças estão unidas */}
+        {allSnapped && (
+          <div style={{
+            position: 'absolute', left: '50%', top: '50%',
+            transform: 'translate(-50%, -50%)',
+            pointerEvents: 'none', zIndex: 7,
+            width: `${heartW}px`, height: `${heartH}px`,
+          }}>
+            <motion.svg
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              width={heartW} height={heartH} viewBox="0 0 400 340"
+            >
+              <path
+                d="M 200 60 L 200 187 L 200 320 M 40 136 L 200 187 L 360 136"
+                fill="none"
+                stroke="#a9772f"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </motion.svg>
+          </div>
+        )}
+
         {/* Peças arrastáveis */}
         {PIECE_DEFS.filter(p => !snapped.includes(p.id)).map(piece => (
           <KintsugiPiece
@@ -309,7 +343,8 @@ const Kintsugi = () => {
             initOffset={getInitOffset(piece.quadrant)}
             snapRadius={snapRadius}
             onSnap={handleSnap}
-            pieceSize={pieceSize}
+            heartW={heartW}
+            heartH={heartH}
           />
         ))}
       </div>
@@ -334,9 +369,6 @@ const Kintsugi = () => {
             <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ display: 'flex', color: '#a9772f' }}><Sparkles size={34} strokeWidth={1.5} aria-hidden="true" /></motion.span>
             <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: 'var(--clay-dark)', fontStyle: 'italic', fontWeight: 500, maxWidth: '340px' }}>
               "Uma vez provado, o ouro brilha mais forte."
-            </p>
-            <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-secondary)', letterSpacing: '0.07em' }}>
-
             </p>
           </motion.div>
         )}

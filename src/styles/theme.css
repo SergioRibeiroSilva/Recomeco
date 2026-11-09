@@ -27,21 +27,11 @@
   --dust-blue: #8ca3b5;
   --kintsugi: #a9772f;   /* ouro antigo — só para as fissuras do Kintsugi */
 
-  /* ── Aliases legados (mantidos para os componentes existentes) ──────── */
-  --color-night-900: var(--bg);
-  --color-gold-300: var(--clay-dark);
-  --color-gold-400: var(--clay);
-  --color-gold-500: var(--clay);
-  --color-sage-300: var(--sage-dark);
-  --color-sage-400: var(--sage);
-  --color-rose-300: var(--blush);
-  --color-sky-300: var(--dust-blue);
-
+  /* ── Aliases semânticos de texto ────────────────────────────────────── */
   --text-main: var(--ink);
   --text-primary: var(--ink);
   --text-secondary: var(--ink-2);
   --text-muted: var(--ink-3);
-  --text-very-muted: #8f8176;
 
   /* ── Superfícies sólidas "papel" ────────────────────────────────────── */
   --surface-1: var(--surface);
@@ -76,15 +66,6 @@
   --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
   --dur-fast: 180ms;
   --dur-base: 300ms;
-
-  /* ── Espaçamento ────────────────────────────────────────────────────── */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
 }
 
 /* ═══ Tipografia base ═══════════════════════════════════════════════════ */

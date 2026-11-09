@@ -11,7 +11,6 @@ import Kintsugi from './components/stages/Kintsugi';
 import Breather from './components/stages/Breather';
 import Strengthening from './components/stages/Strengthening';
 import Final from './components/stages/Final';
-import './styles/theme.css';
 
 const STAGES = [Intro, Narrative, Kintsugi, Breather, Strengthening, Final];
 

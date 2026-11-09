@@ -2,45 +2,19 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CloudRain, Waves, BatteryLow, Sprout } from 'lucide-react';
 import { useJourney } from '../../context/journeyContextObject';
+import { MOODS } from '../../data/shared';
 
-const moods = [
-  {
-    id: 'triste',
-    Icon: CloudRain,
-    label: 'Triste',
-    sublabel: 'E tudo bem estar triste.',
-    bg: '#e3eaf0',
-    border: '#8ca3b5',
-    tint: '#4f6b80',
-  },
-  {
-    id: 'confuso',
-    Icon: Waves,
-    label: 'Confuso',
-    sublabel: 'Sem saber o que sentir.',
-    bg: '#e9e4ee',
-    border: '#a79bb5',
-    tint: '#6b5c80',
-  },
-  {
-    id: 'exaurido',
-    Icon: BatteryLow,
-    label: 'Exausto',
-    sublabel: 'Sem energia pra nada.',
-    bg: '#f3e0d5',
-    border: '#c98b6e',
-    tint: '#9a4f36',
-  },
-  {
-    id: 'esperancoso',
-    Icon: Sprout,
-    label: 'Esperançoso',
-    sublabel: 'Querendo recomeçar.',
-    bg: '#e1e9d8',
-    border: '#8fae8b',
-    tint: '#4f6b45',
-  },
-];
+const MOOD_ICONS = {
+  triste: CloudRain,
+  confuso: Waves,
+  exaurido: BatteryLow,
+  esperancoso: Sprout,
+};
+
+const moods = MOODS.map((m) => ({
+  ...m,
+  Icon: MOOD_ICONS[m.id] || Sprout,
+}));
 
 const floatingVariants = {
   animate: {
@@ -127,7 +101,7 @@ const Intro = () => {
       {/* Cards de Humor */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
         gap: '0.85rem',
         width: '100%',
       }}>

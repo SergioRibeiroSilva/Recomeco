@@ -31,7 +31,8 @@ const Final = () => {
 
   useEffect(() => {
     if (!done) return;
-    rootRef.current?.scrollTo({ top: 0 });
+    rootRef.current?.closest('main')?.scrollTo?.({ top: 0 });
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const canvas = canvasRef.current;
     const myConfetti = confetti.create(canvas, { resize: true, useWorker: false });
 
@@ -76,7 +77,6 @@ const Final = () => {
         textAlign: 'center',
         padding: '2rem 2rem 3rem',
         overflowX: 'hidden',
-        overflowY: 'auto',
       }}
     >
       {/* Canvas de confetes */}
@@ -107,19 +107,23 @@ const Final = () => {
             margin: 'auto',
           }}
         >
-          <p style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 'var(--font-quote)',
-            fontWeight: 400,
-            color: 'var(--text-main)',
-            fontStyle: 'italic',
-            lineHeight: 1.5,
-            maxWidth: '600px',
-          }}>
+          <h1 className="sr-only">Recomeço</h1>
+          <p
+            aria-live="polite"
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'var(--font-quote)',
+              fontWeight: 400,
+              color: 'var(--text-main)',
+              fontStyle: 'italic',
+              lineHeight: 1.5,
+              maxWidth: '600px',
+            }}
+          >
             {MESSAGES[msgIdx]}
           </p>
           {/* Indicador */}
-          <div style={{ display: 'flex', gap: '6px', marginTop: '1rem' }}>
+          <div style={{ display: 'flex', gap: '6px', marginTop: '1rem' }} aria-hidden="true">
             {MESSAGES.map((_, i) => (
               <div key={i} style={{
                 width: i === msgIdx ? '20px' : '6px',
@@ -130,6 +134,14 @@ const Final = () => {
               }} />
             ))}
           </div>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setDone(true)}
+            style={{ marginTop: '1rem', fontSize: 'var(--font-small)', padding: '0.55rem 1.3rem', minHeight: '40px' }}
+          >
+            Ver meu cartão de Alvorecer
+          </button>
         </motion.div>
       ) : (
         <motion.div

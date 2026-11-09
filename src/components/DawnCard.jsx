@@ -16,6 +16,7 @@ const drawCard = async ({ mood, intentions, date }) => {
   try {
     await Promise.all([
       document.fonts.load(`italic 500 44px Fraunces`),
+      document.fonts.load(`italic 400 38px Fraunces`),
       document.fonts.load(`500 44px Fraunces`),
       document.fonts.load(`700 28px 'Nunito Sans'`),
     ]);
@@ -125,6 +126,7 @@ const DawnCard = () => {
   const [status, setStatus] = useState('');
   const [open, setOpen] = useState(false);
   const closeRef = useRef(null);
+  const renderedCanvasRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
@@ -154,7 +156,10 @@ const DawnCard = () => {
     let cancelled = false;
     build()
       .then((canvas) => {
-        if (!cancelled) setPreview(canvas.toDataURL('image/png'));
+        if (!cancelled) {
+          renderedCanvasRef.current = canvas;
+          setPreview(canvas.toDataURL('image/png'));
+        }
       })
       .catch(() => {
         if (!cancelled) setStatus('Não foi possível criar a imagem neste aparelho. Tente novamente mais tarde.');
@@ -165,7 +170,8 @@ const DawnCard = () => {
   const handleSave = async () => {
     let blob;
     try {
-      const canvas = await build();
+      const canvas = renderedCanvasRef.current ?? (await build());
+      renderedCanvasRef.current = canvas;
       blob = await canvasToBlob(canvas);
     } catch {
       blob = null;

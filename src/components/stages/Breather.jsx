@@ -148,7 +148,7 @@ const Breather = () => {
               boxShadow: 'var(--shadow-soft)',
             }}
           >
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               style={{
@@ -158,7 +158,7 @@ const Breather = () => {
               }}
             >
               Respire fundo.
-            </motion.h2>
+            </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -201,14 +201,14 @@ const Breather = () => {
               textAlign: 'center',
             }}
           >
-            <motion.p
+            <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="t-eyebrow"
-              style={{ color: 'var(--color-gold-300)' }}
+              style={{ color: 'var(--clay-dark)' }}
             >
-              Exercício de Respiração · {breathCount}/2 ciclos
-            </motion.p>
+              Exercício de Respiração · Ciclo {Math.min(breathCount + 1, 2)} de 2
+            </motion.h1>
 
             {/* Círculo pulsante */}
             <div style={{ position: 'relative', width: '220px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -283,6 +283,18 @@ const Breather = () => {
                 </p>
               </motion.div>
             </AnimatePresence>
+
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                clearTimeout(intervalRef.current);
+                nextStageRef.current();
+              }}
+              style={{ fontSize: 'var(--font-small)', padding: '0.6rem 1.4rem', minHeight: '40px' }}
+            >
+              Avançar no meu ritmo
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -295,7 +307,6 @@ const Breather = () => {
             position: 'absolute',
             inset: 0,
             background: 'radial-gradient(circle, rgba(112,122,138,0.6) 0%, rgba(84,94,112,0.94) 100%)',
-            backdropFilter: `blur(${(1 - cleared / 100) * 20}px)`,
             pointerEvents: 'none',
           }}
         />

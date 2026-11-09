@@ -27,7 +27,8 @@ const ParticleField = () => {
     let animId;
     let particles = [];
 
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reduceMotion = mql.matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     // Trabalha em pixels CSS; o canvas tem resolução física para ficar nítido em telas retina
     let width = window.innerWidth;
@@ -44,9 +45,12 @@ const ParticleField = () => {
     window.addEventListener('resize', resize);
 
     const handleMouseMove = (e) => {
+      if (reduceMotion) return;
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    if (!reduceMotion) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
 
     // Criar partículas
     for (let i = 0; i < 28; i++) {
@@ -110,20 +114,33 @@ const ParticleField = () => {
       if (!reduceMotion && !document.hidden) animId = requestAnimationFrame(animate);
     };
 
-    // Retoma o loop quando a aba volta a ficar visível
+    // Retoma o loop quando a aba volta a ficar visível ou preferência de movimento muda
     const handleVisibility = () => {
       if (!document.hidden && !reduceMotion) {
         cancelAnimationFrame(animId);
         animate();
       }
     };
+    const handleMotionChange = (e) => {
+      reduceMotion = e.matches;
+      cancelAnimationFrame(animId);
+      if (reduceMotion) {
+        window.removeEventListener('mousemove', handleMouseMove);
+        mouseRef.current = { x: -999, y: -999 };
+      } else {
+        window.addEventListener('mousemove', handleMouseMove);
+        if (!document.hidden) animate();
+      }
+    };
     document.addEventListener('visibilitychange', handleVisibility);
+    mql.addEventListener?.('change', handleMotionChange);
 
     animate();
 
     return () => {
       cancelAnimationFrame(animId);
       document.removeEventListener('visibilitychange', handleVisibility);
+      mql.removeEventListener?.('change', handleMotionChange);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
     };

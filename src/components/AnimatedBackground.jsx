@@ -13,18 +13,18 @@ const STAGE_BG_COLORS = [
 
 // Manchas orgânicas bem suaves (terra, sálvia, pêssego)
 const ORBS = [
-  [{ color: 'rgba(169,91,64,0.08)', x: '-10%', y: '-10%', size: '50vw' },
-   { color: 'rgba(127,145,112,0.10)', x: '70%', y: '60%', size: '40vw' }],
-  [{ color: 'rgba(169,91,64,0.09)', x: '-5%', y: '-5%', size: '55vw' },
-   { color: 'rgba(140,163,181,0.10)', x: '60%', y: '50%', size: '45vw' }],
-  [{ color: 'rgba(201,139,110,0.14)', x: '-15%', y: '20%', size: '50vw' },
-   { color: 'rgba(167,155,181,0.10)', x: '65%', y: '-10%', size: '45vw' }],
-  [{ color: 'rgba(127,145,112,0.18)', x: '10%', y: '-15%', size: '55vw' },
-   { color: 'rgba(140,163,181,0.12)', x: '55%', y: '60%', size: '50vw' }],
-  [{ color: 'rgba(127,145,112,0.18)', x: '-10%', y: '10%', size: '60vw' },
-   { color: 'rgba(232,196,180,0.30)', x: '60%', y: '-20%', size: '55vw' }],
-  [{ color: 'rgba(240,170,120,0.30)', x: '-5%', y: '-5%', size: '60vw' },
-   { color: 'rgba(232,150,120,0.22)', x: '50%', y: '40%', size: '55vw' }],
+  [{ color: 'rgba(169,91,64,0.08)', x: -10, y: -10, size: '50vw' },
+   { color: 'rgba(127,145,112,0.10)', x: 70, y: 60, size: '40vw' }],
+  [{ color: 'rgba(169,91,64,0.09)', x: -5, y: -5, size: '55vw' },
+   { color: 'rgba(140,163,181,0.10)', x: 60, y: 50, size: '45vw' }],
+  [{ color: 'rgba(201,139,110,0.14)', x: -15, y: 20, size: '50vw' },
+   { color: 'rgba(167,155,181,0.10)', x: 65, y: -10, size: '45vw' }],
+  [{ color: 'rgba(127,145,112,0.18)', x: 10, y: -15, size: '55vw' },
+   { color: 'rgba(140,163,181,0.12)', x: 55, y: 60, size: '50vw' }],
+  [{ color: 'rgba(127,145,112,0.18)', x: -10, y: 10, size: '60vw' },
+   { color: 'rgba(232,196,180,0.30)', x: 60, y: -20, size: '55vw' }],
+  [{ color: 'rgba(240,170,120,0.30)', x: -5, y: -5, size: '60vw' },
+   { color: 'rgba(232,150,120,0.22)', x: 50, y: 40, size: '55vw' }],
 ];
 
 const AnimatedBackground = () => {
@@ -48,8 +48,8 @@ const AnimatedBackground = () => {
           key={i}
           animate={{
             // transform (GPU) em vez de left/top, que forçam layout a cada frame
-            x: `${parseFloat(orb.x)}vw`,
-            y: `${parseFloat(orb.y)}vh`,
+            x: `${orb.x}vw`,
+            y: `${orb.y}vh`,
             backgroundColor: orb.color,
           }}
           transition={{ duration: 3, ease: 'easeInOut' }}
@@ -61,6 +61,7 @@ const AnimatedBackground = () => {
             height: orb.size,
             borderRadius: '50%',
             filter: 'blur(90px)',
+            willChange: 'transform',
             pointerEvents: 'none',
           }}
         />

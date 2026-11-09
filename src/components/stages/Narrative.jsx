@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useJourney } from '../../context/journeyContextObject';
 
@@ -114,12 +114,13 @@ const CHAPTER_GROUPS = [
   ],
 ];
 
-const TypewriterText = ({ text }) => {
+const TypewriterText = ({ text, skip }) => {
   // O contador pertence a um texto específico: ao trocar o texto, volta a 0 sem precisar de setState no effect
   const [progress, setProgress] = useState({ text, count: 0 });
-  const count = progress.text === text ? progress.count : 0;
+  const count = skip ? text.length : progress.text === text ? progress.count : 0;
 
   useEffect(() => {
+    if (skip) return;
     let i = 0;
     const interval = setInterval(() => {
       i++;
@@ -127,7 +128,7 @@ const TypewriterText = ({ text }) => {
       if (i >= text.length) clearInterval(interval);
     }, 28);
     return () => clearInterval(interval);
-  }, [text]);
+  }, [text, skip]);
 
   return (
     <>
@@ -139,9 +140,11 @@ const TypewriterText = ({ text }) => {
 
 const Narrative = () => {
   const { nextStage } = useJourney();
+  const reduceMotion = useReducedMotion();
   const [chapterIndex, setChapterIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [showNext, setShowNext] = useState(false);
+  const [skippedChapter, setSkippedChapter] = useState(-1);
 
   // Seleciona um grupo de capítulos aleatoriamente na montagem do componente
   const [chapters] = useState(
@@ -149,14 +152,16 @@ const Narrative = () => {
   );
 
   const chapter = chapters[chapterIndex];
+  const isTypingSkipped = Boolean(reduceMotion) || skippedChapter === chapterIndex;
 
-  // Opções só ficam ativas depois que a frase terminou de ser digitada
+  // Opções ficam ativas assim que a frase termina de ser digitada (ou imediatamente em movimento reduzido / clique)
   const [readyIndex, setReadyIndex] = useState(-1);
-  const optionsReady = readyIndex === chapterIndex;
+  const optionsReady = isTypingSkipped || readyIndex === chapterIndex;
   useEffect(() => {
-    const t = setTimeout(() => setReadyIndex(chapterIndex), chapter.text.length * 28 + 1000);
+    if (isTypingSkipped) return;
+    const t = setTimeout(() => setReadyIndex(chapterIndex), chapter.text.length * 28 + 600);
     return () => clearTimeout(t);
-  }, [chapterIndex, chapter.text.length]);
+  }, [chapterIndex, chapter.text.length, isTypingSkipped]);
   const nextTimerRef = useRef(null);
   useEffect(() => () => clearTimeout(nextTimerRef.current), []);
   const isLast = chapterIndex === chapters.length - 1;
@@ -164,7 +169,7 @@ const Narrative = () => {
   const handleOptionSelect = (opt) => {
     setSelectedOption(opt);
     clearTimeout(nextTimerRef.current);
-    nextTimerRef.current = setTimeout(() => setShowNext(true), 600);
+    nextTimerRef.current = setTimeout(() => setShowNext(true), reduceMotion ? 0 : 400);
   };
 
   const handleNext = () => {
@@ -176,6 +181,8 @@ const Narrative = () => {
       setShowNext(false);
     }
   };
+
+  const revealDelay = isTypingSkipped ? 0 : chapter.text.length * 0.028 + 0.3;
 
   return (
     <motion.div
@@ -203,17 +210,25 @@ const Narrative = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6 }}
-          style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+          onClick={() => {
+            if (!optionsReady) setSkippedChapter(chapterIndex);
+          }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            cursor: !optionsReady ? 'pointer' : 'default',
+          }}
         >
-          {/* Número do capítulo */}
-          <motion.span
+          {/* Título / Número do capítulo */}
+          <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="t-eyebrow"
-            style={{ color: 'var(--color-gold-300)' }}
+            style={{ color: 'var(--clay-dark)' }}
           >
-            {chapterIndex + 1} / {chapters.length}
-          </motion.span>
+            Reflexão · {chapterIndex + 1} / {chapters.length}
+          </motion.h1>
 
           {/* Frase principal com typewriter */}
           <motion.p
@@ -226,17 +241,17 @@ const Narrative = () => {
               fontStyle: 'italic',
             }}
           >
-            “<TypewriterText text={chapter.text} />”
+            “<TypewriterText text={chapter.text} skip={isTypingSkipped} />”
           </motion.p>
 
           {/* Sub-frase */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: chapter.text.length * 0.028 + 0.5 }}
+            transition={{ delay: revealDelay }}
             style={{
               fontSize: 'var(--font-subtitle)',
-              color: 'var(--color-sage-300)',
+              color: 'var(--sage-dark)',
               fontWeight: 400,
             }}
           >
@@ -248,7 +263,7 @@ const Narrative = () => {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: chapter.text.length * 0.028 + 1 }}
+              transition={{ delay: revealDelay + (isTypingSkipped ? 0 : 0.3) }}
               style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}
             >
               <p className="t-eyebrow" style={{
@@ -259,7 +274,7 @@ const Narrative = () => {
               </p>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
                 gap: '0.75rem',
               }}>
                 {chapter.options.map(opt => (
@@ -281,24 +296,26 @@ const Narrative = () => {
         </motion.div>
       </AnimatePresence>
 
-      {/* Botão Avançar */}
-      <AnimatePresence>
-        {(showNext || !chapter.question) && (
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            onClick={handleNext}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="btn btn-primary"
-            style={{ padding: '0.95rem 2.6rem' }}
-          >
-            {isLast ? 'Estou pronto para continuar' : 'Continuar'}
-            <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* Espaço reservado para o botão Avançar (evita salto de layout) */}
+      <div style={{ minHeight: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <AnimatePresence>
+          {(showNext || !chapter.question) && (
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              onClick={handleNext}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="btn btn-primary"
+              style={{ padding: '0.95rem 2.6rem' }}
+            >
+              {isLast ? 'Estou pronto para continuar' : 'Continuar'}
+              <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 };

@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sprout, Leaf, Flower, Flower2, Trees, Sun, DoorOpen, BookOpen,
-  HeartHandshake, CloudRain, Hourglass, Moon, Sparkles,
+  HeartHandshake, CloudRain, Hourglass, Moon, Sparkles, X,
 } from 'lucide-react';
 import { useJourney } from '../../context/journeyContextObject';
 
@@ -22,60 +22,76 @@ const MAX_LENGTH = 60;
 
 const GARDEN_ICONS = [Sprout, Leaf, Flower, Flower2, Trees, Sun];
 
-const FloatingIntention = ({ text, x, y, delay }) => {
-  const [floatTiming] = useState(() => ({ duration: 3 + Math.random() * 2, delay: Math.random() * 2 }));
-  return (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.5, y: 20 }}
-    animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
-    transition={{
-      opacity: { duration: 0.5, delay },
-      scale: { duration: 0.5, delay },
-      y: { duration: floatTiming.duration, repeat: Infinity, ease: 'easeInOut', delay: floatTiming.delay },
-    }}
+const PlantedIntentionPill = ({ item, onRemove }) => (
+  <motion.li
+    layout
+    initial={{ opacity: 0, scale: 0.85, y: 12 }}
+    animate={{ opacity: 1, scale: 1, y: 0 }}
+    exit={{ opacity: 0, scale: 0.85, y: -8 }}
+    transition={{ duration: 0.3 }}
     style={{
-      position: 'absolute',
-      left: `${x}%`,
-      top: `${y}%`,
-      transform: 'translate(-50%, -50%)',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.5rem',
       background: 'var(--surface)',
       border: '1.5px solid var(--border-gold)',
       boxShadow: 'var(--shadow-soft)',
       borderRadius: 'var(--radius-pill)',
-      padding: '0.7rem 1.4rem',
+      padding: '0.55rem 0.7rem 0.55rem 1.15rem',
       fontFamily: 'var(--font-serif)',
       fontStyle: 'italic',
       fontSize: 'var(--font-body)',
       color: 'var(--text-main)',
-      whiteSpace: 'normal',
-      maxWidth: '80vw',
-      pointerEvents: 'none',
+      maxWidth: '100%',
     }}
   >
-    {text}
-  </motion.div>
-  );
-};
+    <Sprout size={16} strokeWidth={1.8} color="var(--clay)" aria-hidden="true" style={{ flexShrink: 0 }} />
+    <span style={{ wordBreak: 'break-word', textAlign: 'left' }}>{item.text}</span>
+    <button
+      type="button"
+      onClick={() => onRemove(item.id)}
+      aria-label={`Remover intenção "${item.text}"`}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '28px',
+        height: '28px',
+        borderRadius: '50%',
+        background: 'var(--surface-sand)',
+        color: 'var(--ink-2)',
+        flexShrink: 0,
+      }}
+    >
+      <X size={14} strokeWidth={2} aria-hidden="true" />
+    </button>
+  </motion.li>
+);
 
 const Strengthening = () => {
   const { nextStage, intentions, setIntentions } = useJourney();
   const [inputValue, setInputValue] = useState('');
   const [currentAffIdx, setCurrentAffIdx] = useState(0);
-  const [gardenStage, setGardenStage] = useState(0);
   const inputRef = useRef(null);
 
   const affirmation = AFFIRMATIONS[currentAffIdx];
-  
+  const gardenStage = Math.min(intentions.length, GARDEN_ICONS.length - 1);
+
   const handleAdd = (e) => {
     e.preventDefault();
     if (!inputValue.trim() || intentions.length >= MIN_INTENTIONS) return;
-    const x = 15 + Math.random() * 70;
-    const y = 20 + Math.random() * 60;
-    setIntentions(prev => [...prev, { id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`, text: inputValue.trim(), x, y }]);
+    setIntentions(prev => [
+      ...prev,
+      { id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`, text: inputValue.trim() },
+    ]);
     setInputValue('');
-    setGardenStage(prev => Math.min(prev + 1, GARDEN_ICONS.length - 1));
     setCurrentAffIdx(prev => (prev + 1) % AFFIRMATIONS.length);
     inputRef.current?.focus();
+  };
+
+  const handleRemove = (id) => {
+    setIntentions(prev => prev.filter(item => item.id !== id));
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   const canProceed = intentions.length >= MIN_INTENTIONS;
@@ -98,11 +114,6 @@ const Strengthening = () => {
         overflowX: 'hidden',
       }}
     >
-      {/* Intenções flutuantes no fundo */}
-      {intentions.map((int) => (
-        <FloatingIntention key={int.id} text={int.text} x={int.x} y={int.y} delay={0} />
-      ))}
-
       {/* Conteúdo central */}
       <div style={{
         position: 'relative',
@@ -113,7 +124,7 @@ const Strengthening = () => {
         gap: '1.5rem',
         maxWidth: '560px',
         width: '100%',
-        padding: '2rem 1rem 10rem 1rem',
+        padding: '2rem 1rem 6rem 1rem',
         textAlign: 'center',
       }}>
         {/* Jardim de progresso */}
@@ -137,14 +148,14 @@ const Strengthening = () => {
           ))}
         </motion.div>
 
-        <h2 style={{
+        <h1 style={{
           fontSize: 'var(--font-title)',
           fontWeight: 500,
           color: 'var(--text-main)',
           lineHeight: 1.2,
         }}>
           3 sentimentos que você pode cultivar.
-        </h2>
+        </h1>
 
         {/* Afirmação rotativa */}
         <AnimatePresence mode="wait">
@@ -204,6 +215,29 @@ const Strengthening = () => {
             </motion.form>
           )}
         </AnimatePresence>
+
+        {/* Lista organizada de intenções plantadas */}
+        {intentions.length > 0 && (
+          <ul
+            aria-label="Intenções cultivadas"
+            style={{
+              listStyle: 'none',
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '0.65rem',
+              width: '100%',
+              margin: '0.25rem 0',
+              padding: 0,
+            }}
+          >
+            <AnimatePresence>
+              {intentions.map((int) => (
+                <PlantedIntentionPill key={int.id} item={int} onRemove={handleRemove} />
+              ))}
+            </AnimatePresence>
+          </ul>
+        )}
 
         {/* Contador de intenções */}
         <p aria-live="polite" style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
