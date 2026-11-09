@@ -35,6 +35,7 @@ h1, h2, h3 {
 #root {
   width: 100%;
   height: 100vh;
+  height: 100dvh;
 }
 
 /* Scrollbar invisível para elementos internos se necessário */

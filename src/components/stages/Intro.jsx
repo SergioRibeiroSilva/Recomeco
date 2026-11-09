@@ -72,10 +72,10 @@ const Intro = () => {
         justifyContent: 'center',
         width: '100%',
         maxWidth: '860px',
-        height: '100vh',
+        minHeight: '100dvh',
         padding: '1.5rem 1.5rem 8rem 1.5rem',
         textAlign: 'center',
-        overflow: 'hidden',
+        overflowX: 'hidden',
         boxSizing: 'border-box',
       }}
     >

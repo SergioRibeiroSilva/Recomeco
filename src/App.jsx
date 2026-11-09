@@ -42,7 +42,7 @@ const StageManager = () => {
         transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         style={{
           width: '100%',
-          height: '100%',
+          minHeight: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -60,8 +60,8 @@ const JourneyApp = () => {
 
   return (
     <div style={{
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100dvh',
       overflow: 'hidden',
       position: 'relative',
       fontFamily: 'var(--font-sans)',
@@ -79,8 +79,12 @@ const JourneyApp = () => {
         width: '100%',
         height: '100%',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
+        overflowX: 'hidden',
+        overflowY: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        overscrollBehavior: 'contain',
       }}>
         <StageManager />
       </div>

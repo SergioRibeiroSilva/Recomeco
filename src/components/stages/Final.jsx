@@ -69,7 +69,7 @@ const Final = () => {
         alignItems: 'center',
         justifyContent: 'flex-start',
         width: '100%',
-        height: '100vh',
+        minHeight: '100dvh',
         position: 'relative',
         textAlign: 'center',
         padding: '2rem 2rem 3rem',

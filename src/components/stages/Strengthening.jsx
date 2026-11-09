@@ -84,9 +84,11 @@ const Strengthening = () => {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: '100vh',
+        minHeight: '100dvh',
+        padding: '1rem 1rem 8rem',
+        boxSizing: 'border-box',
         position: 'relative',
-        overflow: 'hidden',
+        overflowX: 'hidden',
       }}
     >
       {/* Intenções flutuantes no fundo */}
