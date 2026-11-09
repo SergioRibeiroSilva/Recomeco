@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Sparkles, Flame, Sun } from 'lucide-react';
 import { useJourney } from '../../context/JourneyContext';
 
-const HEART_PATH =
-  'M 200 320 C 200 320 40 220 40 120 C 40 60 80 20 130 20 C 160 20 185 40 200 60 C 215 40 240 20 270 20 C 320 20 360 60 360 120 C 360 220 200 320 200 320 Z';
+import { HEART_PATH } from '../../data/shared';
 
 // Peças do coração — posição inicial será calculada dinamicamente
 const PIECE_DEFS = [
@@ -99,15 +98,15 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
         touchAction: 'none',
         userSelect: 'none',
         filter: dragging
-          ? 'drop-shadow(0 0 22px rgba(239,194,125,0.65))'
-          : 'drop-shadow(0 4px 14px rgba(0,0,0,0.5))',
+          ? 'drop-shadow(0 8px 14px rgba(59,47,42,0.30))'
+          : 'drop-shadow(0 3px 8px rgba(59,47,42,0.22))',
         width: `${pieceSize}px`,
         height: `${pieceSize}px`,
       }}
     >
       <svg width={pieceSize} height={pieceSize} viewBox="0 0 400 340" style={{ display: 'block', pointerEvents: 'none' }}>
         <g style={{ clipPath: piece.clipPath }}>
-          <path d={HEART_PATH} fill="rgba(188,211,242,0.14)" stroke="rgba(188,211,242,0.6)" strokeWidth="3" />
+          <path d={HEART_PATH} fill="rgba(201,139,110,0.22)" stroke="rgba(59,47,42,0.5)" strokeWidth="3" />
         </g>
       </svg>
       {/* Label */}
@@ -116,7 +115,7 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         pointerEvents: 'none', gap: '3px',
       }}>
-        <piece.Icon size={Math.max(pieceSize * 0.2, 18)} strokeWidth={1.6} color="#f6d9a6" aria-hidden="true" />
+        <piece.Icon size={Math.max(pieceSize * 0.2, 18)} strokeWidth={1.6} color="#8a4730" aria-hidden="true" />
         <span style={{ fontSize: `${Math.max(pieceSize * 0.085, 12)}px`, color: 'var(--text-main)', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 }}>
           {piece.label}
         </span>
@@ -206,7 +205,7 @@ const Kintsugi = () => {
           Arraste cada fragmento e comece a reconstrução.
         </p>
         <motion.p
-          animate={{ color: snapped.length > 0 ? '#f6d9a6' : 'rgba(251,244,234,0.68)' }}
+          animate={{ color: snapped.length > 0 ? '#8a4730' : '#6f6057' }}
           className="t-eyebrow"
           aria-live="polite"
         >
@@ -236,8 +235,8 @@ const Kintsugi = () => {
           <svg width={heartDisplaySize} height={heartDisplaySize * 0.92} viewBox="0 0 400 340">
             <path
               d={HEART_PATH}
-              fill="rgba(246,217,166,0.04)"
-              stroke="rgba(246,217,166,0.4)"
+              fill="rgba(169,119,47,0.06)"
+              stroke="rgba(59,47,42,0.35)"
               strokeWidth="2"
               strokeDasharray="10 5"
             />
@@ -259,7 +258,7 @@ const Kintsugi = () => {
                 width={pieceSize} height={pieceSize} viewBox="0 0 400 340"
               >
                 <g style={{ clipPath: piece.clipPath }}>
-                  <path d={HEART_PATH} fill="rgba(239,194,125,0.22)" stroke="#efc27d" strokeWidth="3" />
+                  <path d={HEART_PATH} fill="rgba(169,119,47,0.28)" stroke="#a9772f" strokeWidth="3" />
                 </g>
               </motion.svg>
             </div>
@@ -296,8 +295,8 @@ const Kintsugi = () => {
               gap: '0.4rem',
             }}
           >
-            <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ display: 'flex', color: '#efc27d' }}><Sparkles size={34} strokeWidth={1.5} aria-hidden="true" /></motion.span>
-            <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: '#f6d9a6', fontStyle: 'italic', fontWeight: 500, maxWidth: '340px' }}>
+            <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }} style={{ display: 'flex', color: '#a9772f' }}><Sparkles size={34} strokeWidth={1.5} aria-hidden="true" /></motion.span>
+            <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', color: 'var(--clay-dark)', fontStyle: 'italic', fontWeight: 500, maxWidth: '340px' }}>
               "Uma vez provado, o ouro brilha mais forte."
             </p>
             <p style={{ fontSize: 'var(--font-small)', color: 'var(--text-secondary)', letterSpacing: '0.07em' }}>

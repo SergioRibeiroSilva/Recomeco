@@ -29,8 +29,6 @@ const ProgressBar = () => {
         gap: '0.6rem',
         padding: '0.8rem 1.6rem 0.95rem',
         borderRadius: 'var(--radius-pill)',
-        background: 'rgba(11,17,32,0.55)',
-        boxShadow: 'var(--shadow-soft)',
       }}
     >
       <motion.p
@@ -38,7 +36,7 @@ const ProgressBar = () => {
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         className="t-eyebrow"
-        style={{ color: 'var(--color-gold-300)', fontSize: 'var(--font-tiny)' }}
+        style={{ color: 'var(--clay-dark)', fontSize: 'var(--font-tiny)' }}
       >
         {STAGE_LABELS[currentStage]}
       </motion.p>
@@ -46,7 +44,7 @@ const ProgressBar = () => {
       <div style={{
         width: '200px',
         height: '3px',
-        background: 'var(--surface-3)',
+        background: 'var(--sage-soft)',
         borderRadius: '9999px',
         overflow: 'hidden',
       }}>
@@ -55,7 +53,7 @@ const ProgressBar = () => {
           transition={{ duration: 1, ease: 'easeOut' }}
           style={{
             height: '100%',
-            background: 'linear-gradient(to right, var(--color-sage-400), var(--color-gold-400))',
+            background: 'var(--clay)',
             borderRadius: '9999px',
           }}
         />
@@ -68,7 +66,7 @@ const ProgressBar = () => {
             animate={{
               scale: i === currentStage ? 1.5 : 1,
               opacity: i <= currentStage ? 1 : 0.3,
-              backgroundColor: i === currentStage ? '#efc27d' : 'rgba(251,244,234,0.55)',
+              backgroundColor: i === currentStage ? '#a95b40' : '#7f9170',
             }}
             transition={{ duration: 0.5 }}
             style={{

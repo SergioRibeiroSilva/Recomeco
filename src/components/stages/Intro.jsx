@@ -9,36 +9,36 @@ const moods = [
     Icon: CloudRain,
     label: 'Triste',
     sublabel: 'E tudo bem estar triste.',
-    gradient: 'linear-gradient(145deg, rgba(110,150,220,0.28), rgba(40,60,110,0.35))',
-    glow: 'rgba(130,165,235,0.55)',
-    tint: '#bcd3f2',
+    bg: '#e3eaf0',
+    border: '#8ca3b5',
+    tint: '#4f6b80',
   },
   {
     id: 'confuso',
     Icon: Waves,
     label: 'Confuso',
     sublabel: 'Sem saber o que sentir.',
-    gradient: 'linear-gradient(145deg, rgba(170,140,230,0.28), rgba(70,50,120,0.35))',
-    glow: 'rgba(180,150,235,0.55)',
-    tint: '#d6c6f5',
+    bg: '#e9e4ee',
+    border: '#a79bb5',
+    tint: '#6b5c80',
   },
   {
     id: 'exaurido',
     Icon: BatteryLow,
     label: 'Exausto',
     sublabel: 'Sem energia pra nada.',
-    gradient: 'linear-gradient(145deg, rgba(230,150,120,0.28), rgba(120,60,45,0.35))',
-    glow: 'rgba(235,165,135,0.55)',
-    tint: '#f3c3ad',
+    bg: '#f3e0d5',
+    border: '#c98b6e',
+    tint: '#9a4f36',
   },
   {
     id: 'esperancoso',
     Icon: Sprout,
     label: 'Esperançoso',
     sublabel: 'Querendo recomeçar.',
-    gradient: 'linear-gradient(145deg, rgba(140,210,170,0.28), rgba(40,100,70,0.35))',
-    glow: 'rgba(150,215,180,0.55)',
-    tint: '#bfe0cf',
+    bg: '#e1e9d8',
+    border: '#8fae8b',
+    tint: '#4f6b45',
   },
 ];
 
@@ -138,8 +138,8 @@ const Intro = () => {
             aria-pressed={selected === mood.id}
             className="card"
             style={{
-              background: selected === mood.id ? mood.gradient : 'var(--surface-1)',
-              border: `1px solid ${selected === mood.id ? mood.glow : 'var(--border-soft)'}`,
+              background: selected === mood.id ? mood.bg : 'var(--surface)',
+              border: `1.5px solid ${selected === mood.id ? mood.border : 'var(--border-soft)'}`,
               borderRadius: 'var(--radius-lg)',
               padding: '1.5rem 1.25rem',
               cursor: 'pointer',
@@ -150,22 +150,9 @@ const Intro = () => {
               position: 'relative',
               overflow: 'hidden',
               transition: 'background 0.4s, border 0.4s, box-shadow 0.4s',
-              boxShadow: selected === mood.id ? `0 0 44px -6px ${mood.glow}` : 'var(--shadow-soft)',
+              boxShadow: 'var(--shadow-soft)',
             }}
           >
-            {/* Brilho de fundo no hover */}
-            <motion.div
-              whileHover={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: mood.gradient,
-                opacity: 0,
-                transition: 'opacity 0.3s',
-                zIndex: 0,
-              }}
-            />
             <motion.span
               variants={floatingVariants}
               animate="animate"
@@ -178,8 +165,8 @@ const Intro = () => {
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                background: 'var(--surface-2)',
-                border: '1px solid var(--border-soft)',
+                background: mood.bg,
+                border: `1.5px solid ${mood.border}`,
                 color: mood.tint,
               }}
             >
@@ -208,16 +195,16 @@ const Intro = () => {
       {/* Easter egg sutil */}
       <motion.p
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.45 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 8, duration: 3 }}
         style={{
           marginTop: '1rem',
           fontSize: 'var(--font-tiny)',
-          color: 'var(--color-gold-300)',
-          letterSpacing: '0.18em',
+          color: 'var(--ink-3)',
+          letterSpacing: '0.06em',
         }}
       >
-        ✦ você não está sozinho ✦
+        Você não está sozinho.
       </motion.p>
     </motion.div>
   );

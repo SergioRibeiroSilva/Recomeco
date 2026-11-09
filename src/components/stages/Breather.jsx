@@ -152,7 +152,7 @@ const Breather = () => {
             <div style={{ width: '220px', height: '4px', background: 'var(--surface-3)', borderRadius: '9999px', overflow: 'hidden' }}>
               <motion.div
                 animate={{ width: `${cleared}%` }}
-                style={{ height: '100%', background: 'linear-gradient(to right, var(--color-sky-300), var(--color-gold-300))', borderRadius: '9999px' }}
+                style={{ height: '100%', background: 'var(--sage)', borderRadius: '9999px' }}
               />
             </div>
 
@@ -199,7 +199,7 @@ const Breather = () => {
                   width: '220px',
                   height: '220px',
                   borderRadius: '50%',
-                  border: '2px solid rgba(188,211,242,0.45)',
+                  border: '2px solid rgba(95,115,82,0.5)',
                 }}
               />
               {/* Anel médio */}
@@ -207,10 +207,10 @@ const Breather = () => {
                 animate={{
                   scale: breathPhase === 'exhale' ? 0.7 : breathPhase === 'hold' ? 1.1 : 1,
                   backgroundColor: breathPhase === 'inhale'
-                    ? 'rgba(140,200,215,0.18)'
+                    ? 'rgba(127,145,112,0.25)'
                     : breathPhase === 'hold'
-                    ? 'rgba(239,194,125,0.22)'
-                    : 'rgba(150,185,235,0.14)',
+                    ? 'rgba(169,91,64,0.18)'
+                    : 'rgba(140,163,181,0.22)',
                 }}
                 transition={{ duration: breathPhase === 'inhale' ? 4 : breathPhase === 'exhale' ? 4 : 0.2, ease: 'easeInOut' }}
                 style={{
@@ -218,7 +218,7 @@ const Breather = () => {
                   width: '160px',
                   height: '160px',
                   borderRadius: '50%',
-                  border: '1px solid rgba(188,211,242,0.35)',
+                  border: '1.5px solid rgba(95,115,82,0.4)',
                 }}
               />
               {/* Centro */}
@@ -231,8 +231,8 @@ const Breather = () => {
                   width: '80px',
                   height: '80px',
                   borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(246,217,166,0.55), rgba(140,200,215,0.12))',
-                  color: '#fbf4ea',
+                  background: 'radial-gradient(circle, rgba(169,91,64,0.30), rgba(127,145,112,0.12))',
+                  color: 'var(--clay-dark)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -269,7 +269,7 @@ const Breather = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle, transparent 0%, rgba(7,16,26,0.78) 100%)',
+            background: 'radial-gradient(circle, transparent 0%, rgba(239,228,210,0.95) 100%)',
             backdropFilter: `blur(${(1 - cleared / 100) * 20}px)`,
             pointerEvents: 'none',
           }}
@@ -291,10 +291,9 @@ const Breather = () => {
             width: '300px',
             height: '300px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,230,170,0.4) 0%, rgba(188,211,242,0.2) 35%, rgba(188,211,242,0.05) 60%, transparent 80%)',
+            background: 'radial-gradient(circle, rgba(255,251,244,0.9) 0%, rgba(255,251,244,0.45) 40%, rgba(255,251,244,0) 75%)',
             pointerEvents: 'none',
             zIndex: 15,
-            mixBlendMode: 'screen',
           }}
         />
       )}
@@ -311,7 +310,7 @@ const Breather = () => {
             width: `${Math.random() * 3 + 1}px`,
             height: `${Math.random() * 3 + 1}px`,
             borderRadius: '50%',
-            backgroundColor: '#fbf4ea',
+            backgroundColor: '#a95b40',
             pointerEvents: 'none',
           }}
         />

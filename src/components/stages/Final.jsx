@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Sun, RotateCcw, MessageCircle } from 'lucide-react';
+import { Sun, RotateCcw } from 'lucide-react';
+import DawnCard from '../DawnCard';
 
 const MESSAGES = [
   "Você passou por algo difícil.",
@@ -14,6 +15,7 @@ const Final = () => {
   const [msgIdx, setMsgIdx] = useState(0);
   const [done, setDone] = useState(false);
   const canvasRef = useRef(null);
+  const rootRef = useRef(null);
 
   useEffect(() => {
     if (msgIdx < MESSAGES.length - 1) {
@@ -27,10 +29,11 @@ const Final = () => {
 
   useEffect(() => {
     if (!done) return;
+    rootRef.current?.scrollTo({ top: 0 });
     const canvas = canvasRef.current;
     const myConfetti = confetti.create(canvas, { resize: true, useWorker: false });
 
-    const colors = ['#efc27d', '#f6d9a6', '#f1c4c0', '#bcd3f2', '#bfe0cf'];
+    const colors = ['#a95b40', '#e8c4b4', '#7f9170', '#dce3d1', '#e3a857'];
     let count = 0;
     const max = 6;
     const interval = setInterval(() => {
@@ -57,19 +60,21 @@ const Final = () => {
 
   return (
     <motion.div
+      ref={rootRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         width: '100%',
         height: '100vh',
         position: 'relative',
         textAlign: 'center',
-        padding: '2rem',
-        overflow: 'hidden',
+        padding: '2rem 2rem 3rem',
+        overflowX: 'hidden',
+        overflowY: 'auto',
       }}
     >
       {/* Canvas de confetes */}
@@ -117,7 +122,7 @@ const Final = () => {
                 width: i === msgIdx ? '20px' : '6px',
                 height: '4px',
                 borderRadius: '2px',
-                background: i <= msgIdx ? 'var(--color-gold-400)' : 'var(--surface-3)',
+                background: i <= msgIdx ? 'var(--clay)' : 'var(--surface-3)',
                 transition: 'all 0.4s',
               }} />
             ))}
@@ -132,8 +137,10 @@ const Final = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '2rem',
+            gap: '1.5rem',
             maxWidth: '700px',
+            margin: 'auto',
+            padding: '1rem 0',
           }}
         >
           {/* Ícone solar */}
@@ -143,8 +150,7 @@ const Final = () => {
             aria-hidden="true"
             style={{
               display: 'flex',
-              color: 'var(--color-gold-300)',
-              filter: 'drop-shadow(0 0 28px rgba(246,217,166,0.7))',
+              color: 'var(--clay)',
             }}
           >
             <Sun size={72} strokeWidth={1.2} />
@@ -157,10 +163,7 @@ const Final = () => {
               fontStyle: 'italic',
               lineHeight: 1.1,
               letterSpacing: '-0.02em',
-              background: 'linear-gradient(135deg, #fff7e8 0%, #f6d9a6 45%, #f1c4c0 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: 'var(--ink)',
               marginBottom: '1rem',
               paddingBottom: '0.1em',
             }}>
@@ -179,6 +182,8 @@ const Final = () => {
             </p>
           </div>
 
+          <DawnCard />
+
           {/* Ações */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
             <motion.button
@@ -190,21 +195,6 @@ const Final = () => {
               <RotateCcw size={18} strokeWidth={2} aria-hidden="true" />
               Refazer a jornada
             </motion.button>
-
-            {/* Compartilhar no WhatsApp */}
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => {
-                const url = 'https://SergioRibeiroSilva.github.io/Recomeco/';
-                const text = encodeURIComponent(`Eu passei por uma jornada de recomeço hoje. 🌱 Você também pode: ${url}`);
-                window.open(`https://wa.me/?text=${text}`, '_blank');
-              }}
-              className="btn"
-              style={{ background: '#25D366', borderColor: 'transparent', color: '#06240f' }}
-            >
-              <MessageCircle size={18} strokeWidth={2} aria-hidden="true" /> Compartilhar no WhatsApp
-            </motion.button>
           </div>
 
           {/* Easter egg */}
@@ -215,12 +205,12 @@ const Final = () => {
             style={{
               fontSize: 'var(--font-tiny)',
               letterSpacing: '0.2em',
-              color: 'var(--color-gold-300)',
+              color: 'var(--ink-3)',
               marginTop: '2rem',
               textTransform: 'uppercase',
             }}
           >
-            ✦ Feito com carinho e cuidado para quem precisa recomeçar! ✦
+            Feito com carinho e cuidado para quem precisa recomeçar.
           </motion.p>
         </motion.div>
       )}

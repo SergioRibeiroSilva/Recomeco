@@ -7,6 +7,7 @@ export const JourneyProvider = ({ children }) => {
   const [emotionalProgress, setEmotionalProgress] = useState(0); // 0 a 100
   const [userMood, setUserMood] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [intentions, setIntentions] = useState([]); // intenções plantadas no estágio Strengthening
 
   // Lógica para avançar estágio
   const nextStage = () => {
@@ -32,6 +33,8 @@ export const JourneyProvider = ({ children }) => {
       userMood,
       setMood,
       nextStage,
+      intentions,
+      setIntentions,
       isCompleted
     }}>
       {children}

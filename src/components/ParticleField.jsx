@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useJourney } from '../context/JourneyContext';
 
-// Poeira de luz: do azul-lua ao dourado do amanhecer
+// Pólen suave: tons de terra e sálvia
 const STAGE_COLORS = [
-  { r: 150, g: 170, b: 220 },   // Stage 0 - Azul lua
-  { r: 160, g: 175, b: 225 },   // Stage 1 - Azul névoa
-  { r: 190, g: 175, b: 225 },   // Stage 2 - Lavanda pálida
-  { r: 150, g: 215, b: 220 },   // Stage 3 - Água-marinha
-  { r: 190, g: 225, b: 190 },   // Stage 4 - Sálvia
-  { r: 255, g: 215, b: 150 },   // Stage 5 - Dourado
+  { r: 169, g: 91, b: 64 },     // Stage 0 - Terracota
+  { r: 150, g: 110, b: 85 },    // Stage 1 - Argila
+  { r: 160, g: 110, b: 110 },   // Stage 2 - Rosé terroso
+  { r: 110, g: 140, b: 110 },   // Stage 3 - Sálvia
+  { r: 100, g: 130, b: 95 },    // Stage 4 - Musgo claro
+  { r: 200, g: 120, b: 70 },    // Stage 5 - Âmbar
 ];
 
 const ParticleField = () => {
@@ -40,15 +40,15 @@ const ParticleField = () => {
     window.addEventListener('mousemove', handleMouseMove);
 
     // Criar partículas
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 28; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.5 + 0.1,
-        targetOpacity: Math.random() * 0.5 + 0.1,
+        size: Math.random() * 2.5 + 1,
+        opacity: Math.random() * 0.3 + 0.08,
+        targetOpacity: Math.random() * 0.3 + 0.08,
       });
     }
 
@@ -59,7 +59,7 @@ const ParticleField = () => {
       const stage = stageRef.current;
       const col = STAGE_COLORS[Math.min(stage, STAGE_COLORS.length - 1)];
 
-      particles.forEach((p, i) => {
+      particles.forEach((p) => {
         // Repulsão suave do mouse
         const dx = p.x - mouseRef.current.x;
         const dy = p.y - mouseRef.current.y;
@@ -82,7 +82,7 @@ const ParticleField = () => {
         p.y += p.vy;
 
         // Fade aleatório
-        if (Math.random() < 0.01) p.targetOpacity = Math.random() * 0.5 + 0.1;
+        if (Math.random() < 0.01) p.targetOpacity = Math.random() * 0.3 + 0.08;
         p.opacity = lerp(p.opacity, p.targetOpacity, 0.05);
 
         // Wrap nas bordas
@@ -90,22 +90,6 @@ const ParticleField = () => {
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
-
-        // Conectar partículas próximas
-        for (let j = i + 1; j < particles.length; j++) {
-          const q = particles[j];
-          const ddx = p.x - q.x;
-          const ddy = p.y - q.y;
-          const d = Math.sqrt(ddx * ddx + ddy * ddy);
-          if (d < 120) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(${col.r},${col.g},${col.b},${(1 - d / 120) * 0.15})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(q.x, q.y);
-            ctx.stroke();
-          }
-        }
 
         // Desenhar partícula
         ctx.beginPath();

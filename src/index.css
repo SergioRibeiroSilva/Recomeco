@@ -15,13 +15,13 @@ html, body {
 /* Fundo só no html: o body precisa ficar transparente para a camada
    animada (z-index: -1) do AnimatedBackground aparecer. */
 html {
-  background: var(--color-night-900);
+  background: var(--bg);
 }
 
 body {
   font-family: var(--font-sans);
-  color: var(--text-primary);
-  line-height: 1.5;
+  color: var(--ink);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -44,8 +44,8 @@ h1, h2, h3 {
 
 /* Seleção de texto suave */
 ::selection {
-  background: rgba(239, 194, 125, 0.35);
-  color: #fff;
+  background: var(--clay-soft);
+  color: var(--ink);
 }
 
 button {

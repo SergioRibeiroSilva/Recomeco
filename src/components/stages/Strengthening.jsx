@@ -33,8 +33,9 @@ const FloatingIntention = ({ text, x, y, delay }) => (
       left: `${x}%`,
       top: `${y}%`,
       transform: 'translate(-50%, -50%)',
-      background: 'rgba(239,194,125,0.14)',
-      border: '1px solid rgba(239,194,125,0.4)',
+      background: 'var(--surface)',
+      border: '1.5px solid var(--border-gold)',
+      boxShadow: 'var(--shadow-soft)',
       borderRadius: 'var(--radius-pill)',
       padding: '0.7rem 1.4rem',
       fontFamily: 'var(--font-serif)',
@@ -42,7 +43,6 @@ const FloatingIntention = ({ text, x, y, delay }) => (
       fontSize: 'var(--font-body)',
       color: 'var(--text-main)',
       whiteSpace: 'nowrap',
-      backdropFilter: 'blur(8px)',
       pointerEvents: 'none',
     }}
   >
@@ -51,8 +51,7 @@ const FloatingIntention = ({ text, x, y, delay }) => (
 );
 
 const Strengthening = () => {
-  const { nextStage } = useJourney();
-  const [intentions, setIntentions] = useState([]);
+  const { nextStage, intentions, setIntentions } = useJourney();
   const [inputValue, setInputValue] = useState('');
   const [currentAffIdx, setCurrentAffIdx] = useState(0);
   const [gardenStage, setGardenStage] = useState(0);
@@ -120,7 +119,7 @@ const Strengthening = () => {
               transition={{ type: 'spring', damping: 10 }}
               style={{
                 display: 'flex',
-                color: i === gardenStage ? 'var(--color-gold-300)' : 'var(--color-sage-400)',
+                color: i === gardenStage ? 'var(--clay)' : 'var(--sage)',
               }}
             >
               <GardenIcon size={i === gardenStage ? 36 : 22} strokeWidth={1.5} />
@@ -156,7 +155,7 @@ const Strengthening = () => {
               lineHeight: 1.5,
             }}
           >
-            <affirmation.Icon size={20} strokeWidth={1.6} aria-hidden="true" style={{ flexShrink: 0, color: 'var(--color-gold-300)' }} />
+            <affirmation.Icon size={20} strokeWidth={1.6} aria-hidden="true" style={{ flexShrink: 0, color: 'var(--clay)' }} />
             <span>{affirmation.text}</span>
           </motion.p>
         </AnimatePresence>
@@ -199,7 +198,7 @@ const Strengthening = () => {
         <p aria-live="polite" style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
           {intentions.length < 3
             ? `Digite mais ${3 - intentions.length} intenç${3 - intentions.length !== 1 ? 'ões' : 'ão'} e clique na mudinha para continuar`
-            : '✓ Seu jardim está florescendo!'}
+            : 'Seu jardim está florescendo!'}
         </p>
 
         {/* Botão continuar */}
