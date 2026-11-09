@@ -125,7 +125,12 @@ const Breather = () => {
               zIndex: 10,
               textAlign: 'center',
               maxWidth: '500px',
-              padding: '2rem 2rem 8rem 2rem',
+              padding: '2rem',
+              margin: '0 1rem 6rem',
+              background: 'var(--surface)',
+              border: '1px solid var(--border-soft)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-soft)',
             }}
           >
             <motion.h2
@@ -269,7 +274,7 @@ const Breather = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle, transparent 0%, rgba(239,228,210,0.95) 100%)',
+            background: 'radial-gradient(circle, rgba(112,122,138,0.6) 0%, rgba(84,94,112,0.94) 100%)',
             backdropFilter: `blur(${(1 - cleared / 100) * 20}px)`,
             pointerEvents: 'none',
           }}
@@ -291,7 +296,7 @@ const Breather = () => {
             width: '300px',
             height: '300px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,251,244,0.9) 0%, rgba(255,251,244,0.45) 40%, rgba(255,251,244,0) 75%)',
+            background: 'radial-gradient(circle, rgba(255,251,244,0.95) 0%, rgba(255,251,244,0.5) 40%, rgba(255,251,244,0) 75%)',
             pointerEvents: 'none',
             zIndex: 15,
           }}

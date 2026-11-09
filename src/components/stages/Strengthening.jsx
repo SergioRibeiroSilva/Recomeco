@@ -68,6 +68,7 @@ const Strengthening = () => {
     setInputValue('');
     setGardenStage(prev => Math.min(prev + 1, GARDEN_ICONS.length - 1));
     setCurrentAffIdx(prev => (prev + 1) % AFFIRMATIONS.length);
+    inputRef.current?.focus();
   };
 
   const canProceed = intentions.length >= 3;

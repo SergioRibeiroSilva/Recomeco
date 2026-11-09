@@ -102,6 +102,7 @@ const Final = () => {
             flexDirection: 'column',
             alignItems: 'center',
             gap: '1rem',
+            margin: 'auto',
           }}
         >
           <p style={{
