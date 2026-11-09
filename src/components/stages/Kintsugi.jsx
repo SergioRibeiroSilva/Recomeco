@@ -1,7 +1,7 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Sparkles, Flame, Sun } from 'lucide-react';
-import { useJourney } from '../../context/JourneyContext';
+import { useJourney } from '../../context/journeyContextObject';
 
 import { HEART_PATH } from '../../data/shared';
 
@@ -15,51 +15,70 @@ const PIECE_DEFS = [
 
 // ─── Peça individual ──────────────────────────────────────────────────────────
 const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => {
-  const [offset, setOffset] = useState(initOffset);
+  // null = peça na posição inicial (acompanha resize sem precisar de effect)
+  const [dragOffset, setDragOffset] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const offset = dragOffset ?? initOffset;
+  const offsetRef = useRef(offset);
+  useEffect(() => { offsetRef.current = offset; });
   const dragOrigin = useRef(null);
   const pieceRef = useRef(null);
-
-  // Atualiza posição inicial se o container mudar (resize)
-  useEffect(() => {
-    setOffset(initOffset);
-  }, [initOffset.x, initOffset.y]);
+  const cleanupRef = useRef(null); // remove listeners de window de um arrasto em andamento
 
   const startDrag = useCallback((clientX, clientY) => {
     setDragging(true);
-    dragOrigin.current = { mouseX: clientX, mouseY: clientY, ox: offset.x, oy: offset.y };
-  }, [offset]);
+    dragOrigin.current = { mouseX: clientX, mouseY: clientY, ox: offsetRef.current.x, oy: offsetRef.current.y };
+  }, []);
 
   const moveDrag = useCallback((clientX, clientY) => {
     if (!dragOrigin.current) return;
-    setOffset({
+    setDragOffset({
       x: dragOrigin.current.ox + (clientX - dragOrigin.current.mouseX),
       y: dragOrigin.current.oy + (clientY - dragOrigin.current.mouseY),
     });
   }, []);
 
-  const endDrag = useCallback((clientX, clientY) => {
+  const endDrag = useCallback((clientX, clientY, cancelled = false) => {
     if (!dragOrigin.current) return;
     setDragging(false);
     const finalX = dragOrigin.current.ox + (clientX - dragOrigin.current.mouseX);
     const finalY = dragOrigin.current.oy + (clientY - dragOrigin.current.mouseY);
     const dist = Math.sqrt(finalX ** 2 + finalY ** 2);
-    if (dist <= snapRadius) {
+    if (!cancelled && dist <= snapRadius) {
       onSnap(piece.id);
     } else {
-      setOffset(initOffset); // volta ao ponto inicial com spring
+      setDragOffset(null); // volta ao ponto inicial com spring
     }
     dragOrigin.current = null;
-  }, [initOffset, snapRadius, piece.id, onSnap]);
+  }, [snapRadius, piece.id, onSnap]);
+
+  // Remove listeners pendentes se a peça sair da tela durante um arrasto
+  useEffect(() => () => cleanupRef.current?.(), []);
 
   // Mouse
   const handleMouseDown = (e) => {
     e.preventDefault();
+    cleanupRef.current?.();
     startDrag(e.clientX, e.clientY);
-    const mm = (e) => moveDrag(e.clientX, e.clientY);
-    const mu = (e) => { endDrag(e.clientX, e.clientY); window.removeEventListener('mousemove', mm); window.removeEventListener('mouseup', mu); };
+    const mm = (ev) => moveDrag(ev.clientX, ev.clientY);
+    const mu = (ev) => { cleanup(); endDrag(ev.clientX, ev.clientY); };
+    const cleanup = () => {
+      window.removeEventListener('mousemove', mm);
+      window.removeEventListener('mouseup', mu);
+      cleanupRef.current = null;
+    };
     window.addEventListener('mousemove', mm);
     window.addEventListener('mouseup', mu);
+    cleanupRef.current = cleanup;
+  };
+
+  // Teclado: Enter/Espaço encaixa a peça no lugar (alternativa ao arrastar)
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setDragOffset({ x: 0, y: 0 });
+      onSnap(piece.id);
+    }
   };
 
   // Touch registrado de forma ativa (passive: false) para permitir preventDefault sem avisos no console
@@ -69,12 +88,23 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
 
     const handleTouchStart = (e) => {
       e.preventDefault();
+      cleanupRef.current?.();
       const t = e.touches[0];
       startDrag(t.clientX, t.clientY);
-      const tm = (e) => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); };
-      const tu = (e) => { const t = e.changedTouches[0]; endDrag(t.clientX, t.clientY); window.removeEventListener('touchmove', tm, { passive: false }); window.removeEventListener('touchend', tu); };
+      const last = { x: t.clientX, y: t.clientY };
+      const tm = (ev) => { const p = ev.touches[0]; last.x = p.clientX; last.y = p.clientY; moveDrag(p.clientX, p.clientY); };
+      const tu = (ev) => { const p = ev.changedTouches[0]; cleanup(); endDrag(p.clientX, p.clientY); };
+      const tc = () => { cleanup(); endDrag(last.x, last.y, true); };
+      const cleanup = () => {
+        window.removeEventListener('touchmove', tm);
+        window.removeEventListener('touchend', tu);
+        window.removeEventListener('touchcancel', tc);
+        cleanupRef.current = null;
+      };
       window.addEventListener('touchmove', tm, { passive: false });
       window.addEventListener('touchend', tu);
+      window.addEventListener('touchcancel', tc);
+      cleanupRef.current = cleanup;
     };
 
     el.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -87,6 +117,10 @@ const KintsugiPiece = ({ piece, initOffset, snapRadius, onSnap, pieceSize }) => 
     <div
       ref={pieceRef}
       onMouseDown={handleMouseDown}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`Encaixar a peça ${piece.label}`}
       style={{
         position: 'absolute',
         left: '50%',
@@ -156,13 +190,15 @@ const Kintsugi = () => {
   });
 
   const handleSnap = useCallback((id) => {
-    setSnapped(prev => {
-      if (prev.includes(id)) return prev;
-      const next = [...prev, id];
-      if (next.length === PIECE_DEFS.length) setTimeout(nextStage, 3000);
-      return next;
-    });
-  }, [nextStage]);
+    setSnapped(prev => (prev.includes(id) ? prev : [...prev, id]));
+  }, []);
+
+  // Ao completar o coração, avança depois de uma pausa (limpa no unmount)
+  useEffect(() => {
+    if (!allSnapped) return;
+    const t = setTimeout(nextStage, 3000);
+    return () => clearTimeout(t);
+  }, [allSnapped, nextStage]);
 
   // Tamanho do SVG do coração alvo (proporcional ao container)
   const heartDisplaySize = Math.min(dims.w * 0.55, dims.h * 0.55, 220);

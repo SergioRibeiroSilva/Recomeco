@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useJourney } from '../../context/JourneyContext';
+import { useJourney } from '../../context/journeyContextObject';
 
 const CHAPTER_GROUPS = [
   // Grupo 1: O Peso do Presente (Original)
@@ -115,20 +115,26 @@ const CHAPTER_GROUPS = [
 ];
 
 const TypewriterText = ({ text }) => {
-  const [displayed, setDisplayed] = useState('');
+  // O contador pertence a um texto específico: ao trocar o texto, volta a 0 sem precisar de setState no effect
+  const [progress, setProgress] = useState({ text, count: 0 });
+  const count = progress.text === text ? progress.count : 0;
 
   useEffect(() => {
-    setDisplayed('');
     let i = 0;
     const interval = setInterval(() => {
-      setDisplayed(text.slice(0, i + 1));
       i++;
+      setProgress({ text, count: i });
       if (i >= text.length) clearInterval(interval);
     }, 28);
     return () => clearInterval(interval);
   }, [text]);
 
-  return <span>{displayed}</span>;
+  return (
+    <>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">{text.slice(0, count)}</span>
+    </>
+  );
 };
 
 const Narrative = () => {
@@ -138,10 +144,9 @@ const Narrative = () => {
   const [showNext, setShowNext] = useState(false);
 
   // Seleciona um grupo de capítulos aleatoriamente na montagem do componente
-  const chapters = useMemo(() => {
-    const randomIndex = Math.floor(Math.random() * CHAPTER_GROUPS.length);
-    return CHAPTER_GROUPS[randomIndex];
-  }, []);
+  const [chapters] = useState(
+    () => CHAPTER_GROUPS[Math.floor(Math.random() * CHAPTER_GROUPS.length)]
+  );
 
   const chapter = chapters[chapterIndex];
   const isLast = chapterIndex === chapters.length - 1;

@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sprout, Leaf, Flower, Flower2, Trees, Sun, DoorOpen, BookOpen,
   HeartHandshake, CloudRain, Hourglass, Moon, Sparkles,
 } from 'lucide-react';
-import { useJourney } from '../../context/JourneyContext';
+import { useJourney } from '../../context/journeyContextObject';
 
 const AFFIRMATIONS = [
   { text: "Você não precisa entender tudo agora.", Icon: Leaf },
@@ -19,14 +19,16 @@ const AFFIRMATIONS = [
 
 const GARDEN_ICONS = [Sprout, Leaf, Flower, Flower2, Trees, Sun];
 
-const FloatingIntention = ({ text, x, y, delay }) => (
+const FloatingIntention = ({ text, x, y, delay }) => {
+  const [floatTiming] = useState(() => ({ duration: 3 + Math.random() * 2, delay: Math.random() * 2 }));
+  return (
   <motion.div
     initial={{ opacity: 0, scale: 0.5, y: 20 }}
     animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
     transition={{
       opacity: { duration: 0.5, delay },
       scale: { duration: 0.5, delay },
-      y: { duration: 3 + Math.random() * 2, repeat: Infinity, ease: 'easeInOut', delay: Math.random() * 2 },
+      y: { duration: floatTiming.duration, repeat: Infinity, ease: 'easeInOut', delay: floatTiming.delay },
     }}
     style={{
       position: 'absolute',
@@ -48,7 +50,8 @@ const FloatingIntention = ({ text, x, y, delay }) => (
   >
     {text}
   </motion.div>
-);
+  );
+};
 
 const Strengthening = () => {
   const { nextStage, intentions, setIntentions } = useJourney();
@@ -92,7 +95,7 @@ const Strengthening = () => {
       }}
     >
       {/* Intenções flutuantes no fundo */}
-      {intentions.map((int, i) => (
+      {intentions.map((int) => (
         <FloatingIntention key={int.id} text={int.text} x={int.x} y={int.y} delay={0} />
       ))}
 

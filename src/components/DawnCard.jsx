@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Download, Maximize2, X } from 'lucide-react';
-import { useJourney } from '../context/JourneyContext';
+import { useJourney } from '../context/journeyContextObject';
 import { HEART_PATH, MOOD_LABELS } from '../data/shared';
 
 const W = 1080;

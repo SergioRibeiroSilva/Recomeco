@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { useJourney } from '../context/JourneyContext';
+import { useJourney } from '../context/journeyContextObject';
 
 const STAGE_LABELS = ['Início', 'Reconhecimento', 'Reconstrução', 'Respiração', 'Intenções', 'Recomeço'];
 

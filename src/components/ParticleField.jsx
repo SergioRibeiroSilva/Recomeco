@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { useJourney } from '../context/JourneyContext';
+import { useEffect, useRef } from 'react';
+import { useJourney } from '../context/journeyContextObject';
 
 // Pólen suave: tons de terra e sálvia
 const STAGE_COLORS = [

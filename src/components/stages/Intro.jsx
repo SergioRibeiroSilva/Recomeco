@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { CloudRain, Waves, BatteryLow, Sprout } from 'lucide-react';
-import { useJourney } from '../../context/JourneyContext';
+import { useJourney } from '../../context/journeyContextObject';
 
 const moods = [
   {
@@ -53,10 +53,15 @@ const Intro = () => {
   const { setMood, nextStage } = useJourney();
   const [selected, setSelected] = useState(null);
 
+  const timerRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
   const handleSelect = (mood) => {
+    if (timerRef.current) return; // já escolheu: ignora cliques repetidos
     setSelected(mood.id);
     setMood(mood.id);
-    setTimeout(nextStage, 800);
+    timerRef.current = setTimeout(nextStage, 800);
   };
 
   return (

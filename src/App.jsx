@@ -1,6 +1,6 @@
-import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { JourneyProvider, useJourney } from './context/JourneyContext';
+import { JourneyProvider } from './context/JourneyContext';
+import { useJourney } from './context/journeyContextObject';
 import ParticleField from './components/ParticleField';
 import AnimatedBackground from './components/AnimatedBackground';
 import ProgressBar from './components/ProgressBar';

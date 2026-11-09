@@ -1,51 +1,47 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { JourneyContext } from './journeyContextObject';
 
-const JourneyContext = createContext();
+const LAST_STAGE = 5;
 
 export const JourneyProvider = ({ children }) => {
   const [currentStage, setCurrentStage] = useState(0); // 0 a 5
   const [emotionalProgress, setEmotionalProgress] = useState(0); // 0 a 100
   const [userMood, setUserMood] = useState(null);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [intentions, setIntentions] = useState([]); // intenções plantadas no estágio Strengthening
 
-  // Lógica para avançar estágio
-  const nextStage = () => {
-    if (currentStage < 5) {
-      setCurrentStage(prev => prev + 1);
-      setEmotionalProgress(prev => Math.min(prev + 20, 100));
-    } else {
-      setIsCompleted(true);
-    }
-  };
+  // Avança um estágio. Identidade estável e sem depender do estágio atual no closure,
+  // para que chamadas atrasadas (timeouts) nunca usem um valor antigo.
+  const nextStage = useCallback(() => {
+    setCurrentStage(prev => {
+      if (prev >= LAST_STAGE) return prev;
+      return prev + 1;
+    });
+    setEmotionalProgress(prev => Math.min(prev + 20, 100));
+  }, []);
 
-  const setMood = (mood) => {
+  const setMood = useCallback((mood) => {
     setUserMood(mood);
     setEmotionalProgress(10); // Começa com 10% de progresso ao admitir o sentimento
-  };
+  }, []);
+
+  const isCompleted = currentStage >= LAST_STAGE;
+
+  const value = useMemo(() => ({
+    currentStage,
+    setCurrentStage,
+    emotionalProgress,
+    setEmotionalProgress,
+    userMood,
+    setMood,
+    nextStage,
+    intentions,
+    setIntentions,
+    isCompleted,
+  }), [currentStage, emotionalProgress, userMood, setMood, nextStage, intentions, isCompleted]);
 
   return (
-    <JourneyContext.Provider value={{
-      currentStage,
-      setCurrentStage,
-      emotionalProgress,
-      setEmotionalProgress,
-      userMood,
-      setMood,
-      nextStage,
-      intentions,
-      setIntentions,
-      isCompleted
-    }}>
+    <JourneyContext.Provider value={value}>
       {children}
     </JourneyContext.Provider>
   );
-};
-
-export const useJourney = () => {
-  const context = useContext(JourneyContext);
-  if (!context) {
-    throw new Error('useJourney deve ser usado dentro de um JourneyProvider');
-  }
-  return context;
 };

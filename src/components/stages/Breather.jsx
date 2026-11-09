@@ -1,19 +1,30 @@
-import React, { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wind, Pause, Feather } from 'lucide-react';
-import { useJourney } from '../../context/JourneyContext';
+import { useJourney } from '../../context/journeyContextObject';
 
 const PHASE_ICONS = { inhale: Wind, hold: Pause, exhale: Feather };
 
 const Breather = () => {
   const { nextStage } = useJourney();
   const [cleared, setCleared] = useState(0);
-  const [exhaling, setExhaling] = useState(false);
   const [breathPhase, setBreathPhase] = useState('inhale'); // inhale | hold | exhale
   const [breathCount, setBreathCount] = useState(0);
   const [mode, setMode] = useState('fog'); // fog | breathe
   const intervalRef = useRef(null);
   const containerRef = useRef(null);
+  const nextStageRef = useRef(nextStage);
+  useEffect(() => { nextStageRef.current = nextStage; }, [nextStage]);
+
+  // Estrelas geradas uma única vez (evita piscar a cada render)
+  const [stars] = useState(() =>
+    Array.from({ length: 30 }, () => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      peak: Math.random() * 0.6 + 0.2,
+    }))
+  );
 
   // Estados para rastrear a posição do cursor/toque e se ele já se moveu
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -31,7 +42,7 @@ const Breather = () => {
   }, [mode]);
 
   // Touch registrado de forma ativa (passive: false) para permitir preventDefault sem avisos
-  React.useEffect(() => {
+  useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
@@ -51,30 +62,33 @@ const Breather = () => {
   }, [mode]);
 
   // Quando a névoa está suficientemente limpa, ir para modo respiração
-  React.useEffect(() => {
+  useEffect(() => {
     if (cleared >= 100 && mode === 'fog') {
-      setTimeout(() => setMode('breathe'), 500);
+      const t = setTimeout(() => setMode('breathe'), 500);
+      return () => clearTimeout(t);
     }
   }, [cleared, mode]);
 
   // Ciclo de respiração
-  React.useEffect(() => {
+  useEffect(() => {
     if (mode !== 'breathe') return;
     const phases = ['inhale', 'hold', 'exhale'];
     const durations = [4000, 2000, 4000];
     let phaseIdx = 0;
+    let cycles = 0;
 
     const runPhase = () => {
       setBreathPhase(phases[phaseIdx]);
       intervalRef.current = setTimeout(() => {
         phaseIdx = (phaseIdx + 1) % 3;
         if (phaseIdx === 0) {
-          setBreathCount(c => {
-            if (c + 1 >= 2) {
-              setTimeout(nextStage, 1000);
-            }
-            return c + 1;
-          });
+          cycles += 1;
+          setBreathCount(cycles);
+          if (cycles >= 2) {
+            // Termina o exercício: um único timeout, limpo no unmount
+            intervalRef.current = setTimeout(() => nextStageRef.current(), 1000);
+            return;
+          }
         }
         runPhase();
       }, durations[phaseIdx]);
@@ -82,13 +96,14 @@ const Breather = () => {
 
     runPhase();
     return () => clearTimeout(intervalRef.current);
-  }, [mode, nextStage]);
+  }, [mode]);
 
   const phaseText = {
     inhale: { text: 'Inspire', sub: '4 segundos', scale: 1.4 },
     hold: { text: 'Segure', sub: '2 segundos', scale: 1.4 },
     exhale: { text: 'Expire', sub: '4 segundos', scale: 1 },
   }[breathPhase];
+  const PhaseIcon = PHASE_ICONS[breathPhase];
 
   return (
     <motion.div
@@ -243,7 +258,7 @@ const Breather = () => {
                   justifyContent: 'center',
                 }}
               >
-                {React.createElement(PHASE_ICONS[breathPhase], { size: 30, strokeWidth: 1.6, 'aria-hidden': true })}
+                <PhaseIcon size={30} strokeWidth={1.6} aria-hidden="true" />
               </motion.div>
             </div>
 
@@ -304,16 +319,16 @@ const Breather = () => {
       )}
 
       {/* Estrelas reveladas conforme limpa */}
-      {[...Array(30)].map((_, i) => (
+      {stars.map((s, i) => (
         <motion.div
           key={i}
-          animate={{ opacity: (cleared / 100) * (Math.random() * 0.6 + 0.2) }}
+          animate={{ opacity: (cleared / 100) * s.peak }}
           style={{
             position: 'absolute',
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            width: `${Math.random() * 3 + 1}px`,
-            height: `${Math.random() * 3 + 1}px`,
+            left: `${s.left}%`,
+            top: `${s.top}%`,
+            width: `${s.size}px`,
+            height: `${s.size}px`,
             borderRadius: '50%',
             backgroundColor: '#a95b40',
             pointerEvents: 'none',

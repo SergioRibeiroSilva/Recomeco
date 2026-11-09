@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { useJourney } from '../context/JourneyContext';
+import { useJourney } from '../context/journeyContextObject';
 
 // Do creme matinal ao amanhecer pêssego
 const STAGE_BG_COLORS = [
