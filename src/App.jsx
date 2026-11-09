@@ -1,4 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { JourneyProvider } from './context/JourneyContext';
 import { useJourney } from './context/journeyContextObject';
 import ParticleField from './components/ParticleField';
@@ -25,20 +26,22 @@ const TRANSITIONS = [
   { initial: { opacity: 0, x: 80 }, exit: { opacity: 0, x: -80 } },
   // Strengthening → Final: scale up
   { initial: { opacity: 0, scale: 0.85 }, exit: { opacity: 0, scale: 1.15 } },
+  // Final: sem estágio seguinte, apenas entra
+  { initial: { opacity: 0, scale: 0.85 }, exit: { opacity: 0 } },
 ];
 
 const StageManager = () => {
   const { currentStage } = useJourney();
   const StageComponent = STAGES[currentStage];
-  const trans = TRANSITIONS[Math.min(currentStage, TRANSITIONS.length - 1)];
+  const trans = TRANSITIONS[currentStage];
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={currentStage}
-        initial={{ ...trans.initial, opacity: 0 }}
+        initial={trans.initial}
         animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
-        exit={{ ...trans.exit }}
+        exit={trans.exit}
         transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         style={{
           width: '100%',
@@ -57,6 +60,15 @@ const StageManager = () => {
 const JourneyApp = () => {
   const { currentStage } = useJourney();
   const showProgress = currentStage > 0 && currentStage < 5;
+  const mainRef = useRef(null);
+
+  // A cada troca de etapa: volta ao topo e leva o foco ao conteúdo (leitores de tela e teclado)
+  useEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    el.scrollTo?.({ top: 0 });
+    if (currentStage > 0) el.focus({ preventScroll: true });
+  }, [currentStage]);
 
   return (
     <div style={{
@@ -73,7 +85,8 @@ const JourneyApp = () => {
       <ParticleField />
 
       {/* Camada 3: Conteúdo principal */}
-      <div style={{
+      <main ref={mainRef} tabIndex={-1} style={{
+        outline: 'none',
         position: 'relative',
         zIndex: 10,
         width: '100%',
@@ -87,7 +100,7 @@ const JourneyApp = () => {
         overscrollBehavior: 'contain',
       }}>
         <StageManager />
-      </div>
+      </main>
 
       {/* Camada 4: Barra de progresso (não na intro e não na final) */}
       {showProgress && <ProgressBar />}
@@ -97,9 +110,11 @@ const JourneyApp = () => {
 
 function App() {
   return (
-    <JourneyProvider>
-      <JourneyApp />
-    </JourneyProvider>
+    <MotionConfig reducedMotion="user">
+      <JourneyProvider>
+        <JourneyApp />
+      </JourneyProvider>
+    </MotionConfig>
   );
 }
 

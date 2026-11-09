@@ -1,51 +1,16 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Download, Maximize2, X } from 'lucide-react';
 import { useJourney } from '../context/journeyContextObject';
 import { HEART_PATH, MOOD_LABELS } from '../data/shared';
+import { wrapText, clampLines } from '../utils/text';
 
 const W = 1080;
 const H = 1920;
 const SERIF = "Fraunces, Georgia, 'Times New Roman', serif";
 const SANS = "'Nunito Sans', system-ui, -apple-system, 'Segoe UI', sans-serif";
 const MAX_INTENTIONS = 6;
-
-// Quebra o texto em linhas que caibam em maxWidth (palavras muito longas são cortadas por caractere)
-const wrapText = (ctx, text, maxWidth) => {
-  const lines = [];
-  let line = '';
-  for (const word of text.split(/\s+/).filter(Boolean)) {
-    const test = line ? `${line} ${word}` : word;
-    if (ctx.measureText(test).width <= maxWidth) {
-      line = test;
-      continue;
-    }
-    if (line) lines.push(line);
-    let chunk = '';
-    for (const ch of word) {
-      if (ctx.measureText(chunk + ch).width > maxWidth) {
-        lines.push(chunk);
-        chunk = ch;
-      } else {
-        chunk += ch;
-      }
-    }
-    line = chunk;
-  }
-  if (line) lines.push(line);
-  return lines;
-};
-
-// Limita a quantidade de linhas, adicionando reticências na última se necessário
-const clampLines = (ctx, lines, max, maxWidth) => {
-  if (lines.length <= max) return lines;
-  const out = lines.slice(0, max);
-  let last = out[max - 1];
-  while (last && ctx.measureText(`${last}…`).width > maxWidth) last = last.slice(0, -1);
-  out[max - 1] = `${last.trimEnd()}…`;
-  return out;
-};
 
 const drawCard = async ({ mood, intentions, date }) => {
   try {
@@ -159,12 +124,22 @@ const DawnCard = () => {
   const [preview, setPreview] = useState(null);
   const [status, setStatus] = useState('');
   const [open, setOpen] = useState(false);
+  const closeRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => e.key === 'Escape' && setOpen(false);
+    const opener = document.activeElement;
+    closeRef.current?.focus();
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpen(false);
+      // Mantém o foco dentro do diálogo (único controle focável é o botão Fechar)
+      if (e.key === 'Tab') { e.preventDefault(); closeRef.current?.focus(); }
+    };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      opener?.focus?.();
+    };
   }, [open]);
 
   const mood = MOOD_LABELS[userMood] || null;
@@ -172,22 +147,33 @@ const DawnCard = () => {
 
   const build = useCallback(
     () => drawCard({ mood, intentions, date }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [userMood, intentions],
+    [mood, intentions, date],
   );
 
   useEffect(() => {
     let cancelled = false;
-    build().then((canvas) => {
-      if (!cancelled) setPreview(canvas.toDataURL('image/png'));
-    });
+    build()
+      .then((canvas) => {
+        if (!cancelled) setPreview(canvas.toDataURL('image/png'));
+      })
+      .catch(() => {
+        if (!cancelled) setStatus('Não foi possível criar a imagem neste aparelho. Tente novamente mais tarde.');
+      });
     return () => { cancelled = true; };
   }, [build]);
 
   const handleSave = async () => {
-    const canvas = await build();
-    const blob = await canvasToBlob(canvas);
-    if (!blob) return;
+    let blob;
+    try {
+      const canvas = await build();
+      blob = await canvasToBlob(canvas);
+    } catch {
+      blob = null;
+    }
+    if (!blob) {
+      setStatus('Não foi possível gerar a imagem. Tente novamente.');
+      return;
+    }
     const file = new File([blob], 'alvorecer-recomeco.png', { type: 'image/png' });
 
     if (navigator.canShare?.({ files: [file] })) {
@@ -258,6 +244,7 @@ const DawnCard = () => {
           <button
             type="button"
             aria-label="Fechar"
+            ref={closeRef}
             onClick={() => setOpen(false)}
             style={{
               position: 'absolute', top: 14, right: 14, width: 44, height: 44, borderRadius: 999,

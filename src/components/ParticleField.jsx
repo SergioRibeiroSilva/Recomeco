@@ -27,9 +27,18 @@ const ParticleField = () => {
     let animId;
     let particles = [];
 
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Trabalha em pixels CSS; o canvas tem resolução física para ficar nítido em telas retina
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -42,8 +51,8 @@ const ParticleField = () => {
     // Criar partículas
     for (let i = 0; i < 28; i++) {
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * width,
+        y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 2.5 + 1,
@@ -55,7 +64,7 @@ const ParticleField = () => {
     const lerp = (a, b, t) => a + (b - a) * t;
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, width, height);
       const stage = stageRef.current;
       const col = STAGE_COLORS[Math.min(stage, STAGE_COLORS.length - 1)];
 
@@ -64,15 +73,15 @@ const ParticleField = () => {
         const dx = p.x - mouseRef.current.x;
         const dy = p.y - mouseRef.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
+        if (dist > 0 && dist < 100) {
           const force = (100 - dist) / 100;
           p.vx += (dx / dist) * force * 0.5;
           p.vy += (dy / dist) * force * 0.5;
         }
 
         // Atração ao centro suave
-        p.vx += (canvas.width / 2 - p.x) * 0.00005;
-        p.vy += (canvas.height / 2 - p.y) * 0.00005;
+        p.vx += (width / 2 - p.x) * 0.00005;
+        p.vy += (height / 2 - p.y) * 0.00005;
 
         // Amortecimento
         p.vx *= 0.98;
@@ -86,10 +95,10 @@ const ParticleField = () => {
         p.opacity = lerp(p.opacity, p.targetOpacity, 0.05);
 
         // Wrap nas bordas
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
 
         // Desenhar partícula
         ctx.beginPath();
@@ -98,13 +107,23 @@ const ParticleField = () => {
         ctx.fill();
       });
 
-      animId = requestAnimationFrame(animate);
+      if (!reduceMotion && !document.hidden) animId = requestAnimationFrame(animate);
     };
+
+    // Retoma o loop quando a aba volta a ficar visível
+    const handleVisibility = () => {
+      if (!document.hidden && !reduceMotion) {
+        cancelAnimationFrame(animId);
+        animate();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     animate();
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
     };

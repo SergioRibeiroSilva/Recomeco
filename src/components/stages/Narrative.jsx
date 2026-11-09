@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useJourney } from '../../context/journeyContextObject';
@@ -149,11 +149,22 @@ const Narrative = () => {
   );
 
   const chapter = chapters[chapterIndex];
+
+  // Opções só ficam ativas depois que a frase terminou de ser digitada
+  const [readyIndex, setReadyIndex] = useState(-1);
+  const optionsReady = readyIndex === chapterIndex;
+  useEffect(() => {
+    const t = setTimeout(() => setReadyIndex(chapterIndex), chapter.text.length * 28 + 1000);
+    return () => clearTimeout(t);
+  }, [chapterIndex, chapter.text.length]);
+  const nextTimerRef = useRef(null);
+  useEffect(() => () => clearTimeout(nextTimerRef.current), []);
   const isLast = chapterIndex === chapters.length - 1;
 
   const handleOptionSelect = (opt) => {
     setSelectedOption(opt);
-    setTimeout(() => setShowNext(true), 600);
+    clearTimeout(nextTimerRef.current);
+    nextTimerRef.current = setTimeout(() => setShowNext(true), 600);
   };
 
   const handleNext = () => {
@@ -258,6 +269,7 @@ const Narrative = () => {
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleOptionSelect(opt)}
                     aria-pressed={selectedOption === opt}
+                    disabled={!optionsReady}
                     className="option"
                   >
                     {opt}

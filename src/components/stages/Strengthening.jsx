@@ -17,6 +17,9 @@ const AFFIRMATIONS = [
   { text: "Você é inteiro mesmo sem alguém ao lado.", Icon: Moon },
 ];
 
+const MIN_INTENTIONS = 3; // mínimo para continuar; também é o limite (o formulário some ao atingi-lo)
+const MAX_LENGTH = 60;
+
 const GARDEN_ICONS = [Sprout, Leaf, Flower, Flower2, Trees, Sun];
 
 const FloatingIntention = ({ text, x, y, delay }) => {
@@ -44,7 +47,8 @@ const FloatingIntention = ({ text, x, y, delay }) => {
       fontStyle: 'italic',
       fontSize: 'var(--font-body)',
       color: 'var(--text-main)',
-      whiteSpace: 'nowrap',
+      whiteSpace: 'normal',
+      maxWidth: '80vw',
       pointerEvents: 'none',
     }}
   >
@@ -64,17 +68,17 @@ const Strengthening = () => {
   
   const handleAdd = (e) => {
     e.preventDefault();
-    if (!inputValue.trim() || intentions.length >= 6) return;
+    if (!inputValue.trim() || intentions.length >= MIN_INTENTIONS) return;
     const x = 15 + Math.random() * 70;
     const y = 20 + Math.random() * 60;
-    setIntentions(prev => [...prev, { id: Date.now(), text: inputValue, x, y }]);
+    setIntentions(prev => [...prev, { id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`, text: inputValue.trim(), x, y }]);
     setInputValue('');
     setGardenStage(prev => Math.min(prev + 1, GARDEN_ICONS.length - 1));
     setCurrentAffIdx(prev => (prev + 1) % AFFIRMATIONS.length);
     inputRef.current?.focus();
   };
 
-  const canProceed = intentions.length >= 3;
+  const canProceed = intentions.length >= MIN_INTENTIONS;
 
   return (
     <motion.div
@@ -183,15 +187,16 @@ const Strengthening = () => {
                 aria-label="Escreva uma intenção para cultivar"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
-                placeholder={`O que você quer cultivar? (${intentions.length}/3)`}
-                disabled={intentions.length >= 6}
+                placeholder={`O que você quer cultivar? (${intentions.length}/${MIN_INTENTIONS})`}
+                maxLength={MAX_LENGTH}
+                disabled={intentions.length >= MIN_INTENTIONS}
               />
               <motion.button
                 type="submit"
                 aria-label="Plantar intenção"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                disabled={!inputValue.trim() || intentions.length >= 6}
+                disabled={!inputValue.trim() || intentions.length >= MIN_INTENTIONS}
                 className="btn btn-primary btn-icon"
               >
                 <Sprout size={22} strokeWidth={2} aria-hidden="true" />
@@ -202,7 +207,7 @@ const Strengthening = () => {
 
         {/* Contador de intenções */}
         <p aria-live="polite" style={{ fontSize: 'var(--font-small)', color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
-          {intentions.length < 3
+          {intentions.length < MIN_INTENTIONS
             ? `Digite mais ${3 - intentions.length} intenç${3 - intentions.length !== 1 ? 'ões' : 'ão'} e clique na mudinha para continuar`
             : 'Seu jardim está florescendo!'}
         </p>

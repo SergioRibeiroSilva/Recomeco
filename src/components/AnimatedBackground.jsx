@@ -47,13 +47,16 @@ const AnimatedBackground = () => {
         <motion.div
           key={i}
           animate={{
-            left: orb.x,
-            top: orb.y,
+            // transform (GPU) em vez de left/top, que forçam layout a cada frame
+            x: `${parseFloat(orb.x)}vw`,
+            y: `${parseFloat(orb.y)}vh`,
             backgroundColor: orb.color,
           }}
           transition={{ duration: 3, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
+            left: 0,
+            top: 0,
             width: orb.size,
             height: orb.size,
             borderRadius: '50%',

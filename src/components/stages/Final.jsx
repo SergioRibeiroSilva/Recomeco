@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Sun, RotateCcw } from 'lucide-react';
 import DawnCard from '../DawnCard';
+import { useJourney } from '../../context/journeyContextObject';
 
 const MESSAGES = [
   "Você passou por algo difícil.",
@@ -12,6 +13,7 @@ const MESSAGES = [
 ];
 
 const Final = () => {
+  const { resetJourney } = useJourney();
   const [msgIdx, setMsgIdx] = useState(0);
   const [done, setDone] = useState(false);
   const canvasRef = useRef(null);
@@ -190,7 +192,7 @@ const Final = () => {
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
-              onClick={() => window.location.reload()}
+              onClick={resetJourney}
               className="btn"
             >
               <RotateCcw size={18} strokeWidth={2} aria-hidden="true" />

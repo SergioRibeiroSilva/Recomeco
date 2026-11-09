@@ -24,6 +24,13 @@ export const JourneyProvider = ({ children }) => {
     setEmotionalProgress(10); // Começa com 10% de progresso ao admitir o sentimento
   }, []);
 
+  const resetJourney = useCallback(() => {
+    setCurrentStage(0);
+    setEmotionalProgress(0);
+    setUserMood(null);
+    setIntentions([]);
+  }, []);
+
   const isCompleted = currentStage >= LAST_STAGE;
 
   const value = useMemo(() => ({
@@ -34,10 +41,11 @@ export const JourneyProvider = ({ children }) => {
     userMood,
     setMood,
     nextStage,
+    resetJourney,
     intentions,
     setIntentions,
     isCompleted,
-  }), [currentStage, emotionalProgress, userMood, setMood, nextStage, intentions, isCompleted]);
+  }), [currentStage, emotionalProgress, userMood, setMood, nextStage, resetJourney, intentions, isCompleted]);
 
   return (
     <JourneyContext.Provider value={value}>

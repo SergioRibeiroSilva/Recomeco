@@ -165,8 +165,13 @@ const Breather = () => {
               transition={{ delay: 0.8 }}
               style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--font-subtitle)', fontStyle: 'italic', color: 'var(--text-secondary)' }}
             >
-              Coloque o dedo na tela e mova o cursor para afastar as nuvens pesadas.
+              Mova o cursor ou deslize o dedo pela tela para afastar as nuvens pesadas.
             </motion.p>
+
+            {/* Alternativa sem mouse/toque (teclado, leitor de tela, movimento limitado) */}
+            <button type="button" className="btn" onClick={() => setCleared(100)}>
+              Dissipar a névoa
+            </button>
 
             {/* Barra de progresso de névoa */}
             <div style={{ width: '220px', height: '4px', background: 'var(--surface-3)', borderRadius: '9999px', overflow: 'hidden' }}>
@@ -176,7 +181,7 @@ const Breather = () => {
               />
             </div>
 
-            <p className="t-eyebrow" aria-live="polite" style={{ color: 'var(--text-primary)' }}>
+            <p className="t-eyebrow" aria-live="off" style={{ color: 'var(--text-primary)' }}>
               {Math.round(cleared)}% da névoa dissipada
             </p>
           </motion.div>

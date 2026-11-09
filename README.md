@@ -1,16 +1,48 @@
-# React + Vite
+# Recomeço
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Uma jornada gentil, em seis etapas, para quem precisa recomeçar depois de uma perda ou de um fim.
 
-Currently, two official plugins are available:
+1. **Intro**: escolha como você está se sentindo.
+2. **Narrativa**: pequenas frases e perguntas para refletir.
+3. **Kintsugi**: junte as peças de um coração (arraste, ou use Enter/Espaço para encaixar).
+4. **Respiração**: dissipe a névoa e faça dois ciclos de respiração guiada.
+5. **Fortalecimento**: plante três intenções.
+6. **Final**: receba um cartão de "Alvorecer" para guardar como imagem.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Privacidade
 
-## React Compiler
+Nada é enviado para servidores. O estado vive só na memória do navegador, e a imagem do cartão é gerada no próprio aparelho. As fontes são servidas pelo próprio app (sem Google Fonts).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> Este app é um acolhimento, não substitui apoio profissional.
 
-## Expanding the ESLint configuration
+## Desenvolvimento
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Requer Node 22.13 ou mais recente.
+
+```bash
+npm install
+npm run dev      # servidor local
+npm run lint     # ESLint
+npm test         # Vitest
+npm run build    # build de produção em dist/
+npm run preview  # serve o build
+```
+
+## Stack
+
+React 19, Vite, framer-motion, lucide-react, canvas-confetti. Estilos em `src/styles/theme.css` (tokens e classes) e inline nos componentes.
+
+## Estrutura
+
+```
+src/
+  App.jsx                  gerência de etapas e camadas
+  context/                 estado da jornada (JourneyContext, useJourney)
+  components/stages/       as seis etapas
+  components/              fundo, partículas, barra de progresso, DawnCard
+  data/, utils/            constantes e helpers (com testes)
+```
+
+## Deploy
+
+Push na `main` roda lint, testes e build, e publica no GitHub Pages (`.github/workflows/deploy.yml`). O `base` do Vite é `/Recomeco/`; se o repositório for renomeado, ajuste `vite.config.js` e as URLs em `index.html`.
